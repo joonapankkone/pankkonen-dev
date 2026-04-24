@@ -1,0 +1,688 @@
+---
+// Projects — Section 03
+// Apple product-grid pattern: cards stay visible, full-width panel opens below.
+// Ref: docs/superpowers/specs/2026-04-24-phase5-projects-design.md
+
+type Stat = { value: string; label: string };
+type Link = { href: string; label: string; style: 'primary' | 'ghost'; disabled?: boolean };
+
+type Project = {
+  id: string;
+  badge: string;
+  title: string;
+  teaser: string;
+  tags: string[];
+  stats: Stat[];
+  paragraphs: string[];
+  links: Link[];
+};
+
+const projects: Project[] = [
+  {
+    id: 'used-car-ml',
+    badge: 'Data & ML',
+    title: 'Used Car Price Prediction',
+    teaser:
+      'Predicting used car prices across 2.6M listings with three ensemble models and honest segment-level results.',
+    tags: ['Python', 'Polars', 'XGBoost', 'CatBoost', 'LightGBM', 'Optuna', 'scikit-learn'],
+    stats: [
+      { value: '2.6M',         label: 'rows processed' },
+      { value: '3',            label: 'models compared' },
+      { value: 'K-fold + Optuna', label: 'hyperparameter search' },
+    ],
+    paragraphs: [
+      'We built a full ML pipeline for used car price prediction — 2.6M rows processed with Polars, feature engineering that explicitly handled survivorship bias and target leakage, and a three-model comparison: XGBoost, CatBoost (ordered boosting), and LightGBM. Bayesian hyperparameter search via Optuna and K-fold cross-validation drove tuning.',
+      'Evaluation went beyond headline metrics — MAE, RMSE, and R² broken down by price band and car type, because segment-level failure modes matter more than aggregate numbers. Limitations are documented honestly. A JAMK coursework project, delivered as a team.',
+    ],
+    links: [
+      { href: '#', label: 'GitHub', style: 'primary', disabled: true },
+    ],
+  },
+  {
+    id: 'team-fearless',
+    badge: 'Team Leadership',
+    title: 'Future Factory — Team Fearless',
+    teaser:
+      'Led a 6-person cross-functional team delivering a PrestaShop e-commerce platform across six Agile sprints and four Gate reviews.',
+    tags: ['PrestaShop', 'Docker', 'GitLab CI/CD', 'CSC Allas', 'Scrum'],
+    stats: [
+      { value: '6', label: 'team members' },
+      { value: '6', label: 'Agile sprints' },
+      { value: '4', label: 'Gate reviews' },
+    ],
+    paragraphs: [
+      'Led a six-person cross-functional team building and deploying a PrestaShop e-commerce platform as a managed service — Docker containerisation, automated DB backup to CSC Allas, CI/CD on GitLab, payment integrations, and security hardening. Delivered across six Scrum sprints and four Gate reviews under the Essence Alpha framework.',
+      'The dual Team Leader and Developer role meant sprint planning, task allocation, and Product Owner collaboration alongside writing actual code. Gate 1 passed cleanly. The team covered the full scope: OPS, security, testing, two more developers. Documentation is public.',
+    ],
+    links: [
+      { href: '#', label: 'GitHub', style: 'primary', disabled: true },
+      { href: 'https://core-c0ad9d.pages.labranet.jamk.fi/', label: 'Docs', style: 'ghost', disabled: false },
+    ],
+  },
+  {
+    id: 'portfolio',
+    badge: 'Frontend',
+    title: 'pankkonen.dev',
+    teaser:
+      'A portfolio built from scratch — Astro, GSAP scroll animations, and a design system inspired by Revolut.',
+    tags: ['Astro', 'Tailwind CSS', 'GSAP', 'Cloudflare Pages', 'TypeScript'],
+    stats: [
+      { value: 'Spring',    label: 'scroll easing (0.16, 1, 0.3, 1)' },
+      { value: '3',         label: 'custom Astro components' },
+      { value: 'CF Pages',  label: 'deployment' },
+    ],
+    paragraphs: [
+      'Built from scratch with a clear design intent — something a recruiter would remember. Astro handles the build, scoped CSS components keep specificity manageable, and GSAP drives the hero entrance animation. The scroll reveal system uses IntersectionObserver with a double requestAnimationFrame trick to prevent skipped transitions.',
+      "Every animation replays on scroll in both directions, spring easing (cubic-bezier 0.16, 1, 0.3, 1) throughout, and the expanding panel you're inside right now was designed before a line of CSS was written. The design system — tokens, typography scale, spacing — lives in global.css and is documented in DESIGN_SPEC.md.",
+    ],
+    links: [
+      { href: '#', label: 'GitHub', style: 'primary', disabled: true },
+    ],
+  },
+];
+---
+
+<section class="proj" id="projects" aria-labelledby="proj-heading">
+  <div class="container proj-wrap">
+
+    <!-- ── Header ─────────────────────────────────────────────── -->
+    <header class="proj-header">
+      <p class="section-index mono" data-reveal>03 · Projects</p>
+      <h2 class="proj-heading" id="proj-heading" data-reveal data-reveal-delay="1">
+        Work that ships.<br />
+        <span class="proj-accent">Real data, agile teams, hard tradeoffs.</span>
+      </h2>
+      <p class="proj-lede" data-reveal data-reveal-delay="2">
+        From 2.6M-row ML pipelines to a 6-person Agile team — each project here
+        has a GitHub repo, a story, and something honest to say about what didn't
+        go perfectly.
+      </p>
+    </header>
+
+    <!-- ── Card grid ──────────────────────────────────────────── -->
+    <div class="proj-grid">
+      {projects.map((p, i) => (
+        <article
+          class="proj-card"
+          data-id={p.id}
+          data-active="false"
+          data-reveal
+          data-reveal-delay={String(i + 1)}
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+          aria-controls="proj-panel"
+        >
+          <span class="proj-expand-icon" aria-hidden="true"></span>
+          <span class="proj-badge mono">{p.badge}</span>
+          <h3 class="proj-card-title">{p.title}</h3>
+          <p class="proj-card-teaser">{p.teaser}</p>
+          <ul class="proj-card-tags" role="list">
+            {p.tags.slice(0, 4).map((tag) => (
+              <li class="proj-tag mono">{tag}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+
+    <!-- ── Pre-rendered panel content (inert until JS clones) ── -->
+    {projects.map((p) => (
+      <template id={`tpl-${p.id}`}>
+        <div class="proj-panel-inner">
+
+          <div class="proj-panel-left">
+            <h3 class="proj-panel-title panel-reveal">{p.title}</h3>
+            {p.paragraphs.map((para) => (
+              <p class="proj-panel-para panel-reveal">{para}</p>
+            ))}
+            <div class="proj-panel-links panel-reveal">
+              {p.links.map((link) =>
+                link.disabled ? (
+                  <span
+                    class={`btn btn-${link.style} btn-disabled`}
+                    aria-disabled="true"
+                    title="GitHub repo coming soon"
+                  >
+                    {link.label}
+                  </span>
+                ) : (
+                  <a
+                    href={link.href}
+                    class={`btn btn-${link.style}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {link.label}
+                  </a>
+                )
+              )}
+            </div>
+          </div>
+
+          <div class="proj-panel-right">
+            <div class="proj-stats panel-reveal">
+              {p.stats.map((stat) => (
+                <div class="proj-stat">
+                  <span class="proj-stat-value">{stat.value}</span>
+                  <span class="proj-stat-label mono">{stat.label}</span>
+                </div>
+              ))}
+            </div>
+            <ul class="proj-panel-tags panel-reveal" role="list">
+              {p.tags.map((tag) => (
+                <li class="proj-tag mono">{tag}</li>
+              ))}
+            </ul>
+          </div>
+
+        </div>
+      </template>
+    ))}
+
+    <!-- ── Panel container (height animated by JS) ────────────── -->
+    <div class="proj-panel" id="proj-panel" aria-hidden="true" aria-live="polite"></div>
+
+  </div>
+</section>
+
+<style>
+  /* ─── Layout ──────────────────────────────────────────────── */
+  .proj {
+    padding-block: var(--space-13) var(--space-13);
+    position: relative;
+  }
+
+  .proj-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8);
+  }
+
+  /* ─── Header ──────────────────────────────────────────────── */
+  .proj-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-8);
+    align-items: end;
+    margin-bottom: var(--space-5);
+  }
+
+  .proj-header .section-index {
+    grid-column: 1 / -1;
+    margin-bottom: var(--space-3);
+  }
+
+  .proj-heading {
+    grid-column: 1 / 2;
+    font-size: var(--text-display-l);
+    color: var(--text);
+    line-height: 1.02;
+  }
+
+  .proj-accent {
+    color: var(--primary-soft);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .proj-lede {
+    grid-column: 2 / 3;
+    color: var(--text-muted);
+    font-size: var(--text-body-l);
+    line-height: 1.55;
+    max-width: 48ch;
+    justify-self: end;
+    padding-bottom: 6px;
+  }
+
+  /* ─── Card grid ───────────────────────────────────────────── */
+  .proj-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .proj-card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    cursor: pointer;
+    user-select: none;
+    /* translate: hover lift | opacity+transform: data-reveal */
+    transition:
+      background 240ms ease,
+      border-color 240ms ease,
+      translate 220ms cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 750ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 750ms cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: visible;
+  }
+
+  .proj-card:hover {
+    background: var(--surface-raised);
+    border-color: rgba(96, 165, 250, 0.35);
+    translate: 0 -2px;
+  }
+
+  .proj-card[data-active='true'] {
+    border-color: rgba(245, 158, 11, 0.45);
+    background: var(--surface-raised);
+    translate: 0 0;
+  }
+
+  /* Amber bottom tab connecting active card to the panel */
+  .proj-card[data-active='true']::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 2px;
+    background: var(--amber);
+    border-radius: 2px 2px 0 0;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+  }
+
+  .proj-badge {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    padding: 3px 10px;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 999px;
+    background: rgba(245, 158, 11, 0.06);
+    color: var(--amber);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .proj-card-title {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 2vw, 26px);
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    transition: color 200ms ease;
+  }
+
+  .proj-card:hover .proj-card-title,
+  .proj-card[data-active='true'] .proj-card-title {
+    color: var(--primary-soft);
+  }
+
+  .proj-card-teaser {
+    color: var(--text-muted);
+    font-size: var(--text-body-m);
+    line-height: 1.55;
+    flex-grow: 1;
+  }
+
+  .proj-card-tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: var(--space-1);
+    border-top: 1px solid var(--rule);
+    margin-top: auto;
+  }
+
+  .proj-tag {
+    padding: 2px 8px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── Panel container ─────────────────────────────────────── */
+  /* height: 0 → px animated by JS; NOT a data-reveal element   */
+  .proj-panel {
+    height: 0;
+    overflow: hidden;
+    transition: height 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .proj-panel-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: var(--space-8);
+    padding: var(--space-5);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 16px;
+    margin-top: var(--space-3);
+    background: var(--surface);
+  }
+
+  /* ─── Panel left ──────────────────────────────────────────── */
+  .proj-panel-left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .proj-panel-title {
+    font-family: var(--font-display);
+    font-size: clamp(26px, 2.8vw, 38px);
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+
+  .proj-panel-para {
+    color: var(--text-muted);
+    font-size: var(--text-body-m);
+    line-height: 1.65;
+    max-width: 62ch;
+  }
+
+  .proj-panel-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: var(--space-1);
+  }
+
+  /* ─── Panel right ─────────────────────────────────────────── */
+  .proj-panel-right {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding-left: var(--space-5);
+    border-left: 1px solid var(--rule);
+  }
+
+  .proj-stats {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .proj-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .proj-stat-value {
+    font-family: var(--font-display);
+    font-size: clamp(30px, 3.2vw, 44px);
+    font-weight: 300;
+    color: var(--primary-soft);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-style: italic;
+  }
+
+  .proj-stat-label {
+    color: var(--text-muted);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+  }
+
+  .proj-panel-tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  /* ─── Panel content reveal (JS-driven, not IO) ────────────── */
+  .panel-reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 400ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .panel-reveal.is-shown {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+  /* ─── Expand icon (+/×) ───────────────────────────────────── */
+  .proj-expand-icon {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid rgba(96, 165, 250, 0.18);
+    background: rgba(59, 130, 246, 0.04);
+    flex-shrink: 0;
+    transition:
+      border-color 240ms ease,
+      background   240ms ease,
+      transform    340ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+  }
+
+  /* Horizontal bar of the + */
+  .proj-expand-icon::before,
+  .proj-expand-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 1px;
+    background: var(--text-muted);
+    transition: background 240ms ease, transform 340ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .proj-expand-icon::before {
+    width: 9px;
+    height: 1.5px;
+    transform: translate(-50%, -50%);
+  }
+
+  .proj-expand-icon::after {
+    width: 1.5px;
+    height: 9px;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Hover — blue tint */
+  .proj-card:hover .proj-expand-icon {
+    border-color: rgba(96, 165, 250, 0.45);
+    background: rgba(59, 130, 246, 0.1);
+  }
+  .proj-card:hover .proj-expand-icon::before,
+  .proj-card:hover .proj-expand-icon::after {
+    background: var(--primary-soft);
+  }
+
+  /* Active — rotate 45° → + becomes ×, amber colour */
+  .proj-card[data-active='true'] .proj-expand-icon {
+    border-color: rgba(245, 158, 11, 0.5);
+    background: rgba(245, 158, 11, 0.08);
+    transform: rotate(45deg);
+  }
+  .proj-card[data-active='true'] .proj-expand-icon::before,
+  .proj-card[data-active='true'] .proj-expand-icon::after {
+    background: var(--amber);
+  }
+
+  /* ─── Mobile ──────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .proj-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .proj {
+      padding-block: var(--space-8);
+    }
+
+    .proj-header {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+      align-items: start;
+    }
+
+    .proj-heading { grid-column: 1 / -1; font-size: 40px; }
+    .proj-lede    { grid-column: 1 / -1; justify-self: start; }
+
+    .proj-panel-inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+
+    .proj-panel-right {
+      padding-left: 0;
+      border-left: none;
+      border-top: 1px solid var(--rule);
+      padding-top: var(--space-5);
+    }
+
+    .proj-stats {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+
+    .proj-stat { min-width: 90px; }
+  }
+</style>
+
+<script>
+  const cards = document.querySelectorAll<HTMLElement>('.proj-card');
+  const panel  = document.getElementById('proj-panel') as HTMLElement;
+  let activeId: string | null = null;
+
+  const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+  const raf   = () => new Promise<void>((r) => requestAnimationFrame(r));
+
+  /** Clone a project's <template> content into the panel. */
+  function injectContent(id: string) {
+    const tpl = document.getElementById(`tpl-${id}`) as HTMLTemplateElement;
+    panel.innerHTML = '';
+    panel.appendChild(tpl.content.cloneNode(true));
+  }
+
+  /** Stagger .panel-reveal children into view. */
+  function staggerReveal() {
+    const items = panel.querySelectorAll<HTMLElement>('.panel-reveal');
+    items.forEach((el, i) => {
+      setTimeout(() => el.classList.add('is-shown'), 80 + i * 80);
+    });
+  }
+
+  /** Set data-active and aria-expanded on all cards. */
+  function setActive(id: string | null) {
+    cards.forEach((c) => {
+      const isActive = c.dataset.id === id;
+      c.dataset.active = String(isActive);
+      c.setAttribute('aria-expanded', String(isActive));
+    });
+  }
+
+  async function openPanel(id: string) {
+    injectContent(id);
+    panel.setAttribute('aria-hidden', 'false');
+
+    // Measure after content is in DOM
+    await raf();
+    const targetH = panel.scrollHeight;
+    panel.style.height = targetH + 'px';
+
+    panel.addEventListener(
+      'transitionend',
+      (e) => { if ((e as TransitionEvent).propertyName === 'height') panel.style.height = 'auto'; },
+      { once: true }
+    );
+
+    activeId = id;
+    setActive(id);
+    staggerReveal();
+  }
+
+  function closePanel() {
+    // height: auto → px so CSS can transition px → 0
+    panel.style.height = panel.scrollHeight + 'px';
+    requestAnimationFrame(() => { panel.style.height = '0'; });
+
+    panel.addEventListener(
+      'transitionend',
+      (e) => {
+        if ((e as TransitionEvent).propertyName === 'height') {
+          panel.innerHTML = '';
+          panel.setAttribute('aria-hidden', 'true');
+        }
+      },
+      { once: true }
+    );
+
+    activeId = null;
+    setActive(null);
+  }
+
+  async function swapPanel(id: string) {
+    // 1. Fade out current content
+    const oldInner = panel.querySelector<HTMLElement>('.proj-panel-inner');
+    if (oldInner) {
+      oldInner.style.transition = 'opacity 150ms ease';
+      oldInner.style.opacity = '0';
+      await sleep(150);
+    }
+
+    // 2. Inject new content, start invisible
+    injectContent(id);
+    const newInner = panel.querySelector<HTMLElement>('.proj-panel-inner')!;
+    newInner.style.opacity = '0';
+
+    // 3. Adjust height to new content
+    await raf();
+    const newH    = panel.scrollHeight;
+    const currentH = panel.offsetHeight;
+    panel.style.height = currentH + 'px';
+    requestAnimationFrame(() => { panel.style.height = newH + 'px'; });
+
+    panel.addEventListener(
+      'transitionend',
+      (e) => { if ((e as TransitionEvent).propertyName === 'height') panel.style.height = 'auto'; },
+      { once: true }
+    );
+
+    // 4. Fade in
+    requestAnimationFrame(() => {
+      newInner.style.transition = 'opacity 300ms ease';
+      newInner.style.opacity = '1';
+    });
+
+    activeId = id;
+    setActive(id);
+    staggerReveal();
+  }
+
+  // ── Wire up cards ──────────────────────────────────────────
+  cards.forEach((card) => {
+    card.addEventListener('click', () => {
+      const id = card.dataset.id!;
+      if (activeId === id)    closePanel();
+      else if (activeId)      swapPanel(id);
+      else                    openPanel(id);
+    });
+
+    // Keyboard: Enter / Space
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
+  });
+</script>

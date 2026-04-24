@@ -1,33 +1,381 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Experience from '../components/Experience.astro';
+import Stack from '../components/Stack.astro';
+import Projects from '../components/Projects.astro';
 ---
 
 <Layout>
-  <div class="container" style="padding-top: 80px;">
-    <p class="mono" style="color: var(--text-muted); letter-spacing: 0.15em; text-transform: uppercase; font-size: var(--text-mono-s); margin-bottom: 24px;">
-      pankkonen.dev — design system ✓
-    </p>
+  <section class="hero container" id="hero">
 
-    <h1 style="font-size: var(--text-display-xl); color: var(--text); margin-bottom: 16px;">
-      Joona<br />Pankkonen
-    </h1>
+    <!-- Left column -->
+    <div class="hero-left">
 
-    <p style="font-size: var(--text-body-l); color: var(--text-muted); margin-bottom: 48px;">
-      IT Engineering · Data Analytics · AI
-    </p>
+      <p class="hero-eyebrow mono" id="hero-eyebrow">
+        pankkonen.dev
+      </p>
 
-    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 64px;">
-      <div style="width: 48px; height: 48px; background: var(--bg); border: 1px solid var(--rule); border-radius: 4px;"></div>
-      <div style="width: 48px; height: 48px; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px;"></div>
-      <div style="width: 48px; height: 48px; background: var(--deep-blue); border-radius: 4px;"></div>
-      <div style="width: 48px; height: 48px; background: var(--primary); border-radius: 4px;"></div>
-      <div style="width: 48px; height: 48px; background: var(--primary-soft); border-radius: 4px;"></div>
-      <div style="width: 48px; height: 48px; background: var(--amber); border-radius: 4px;"></div>
+      <h1 class="hero-name" id="hero-name">
+        Joona<br />Pankkonen
+      </h1>
+
+      <p class="hero-tagline" id="hero-tagline">
+        Data. Code. Systems. — and a 2× world title on the side.
+      </p>
+
+      <div class="hero-status" id="hero-status">
+        <span class="status-dot"></span>
+        <span class="mono status-text">Open to opportunities</span>
+      </div>
+
+      <div class="hero-buttons" id="hero-buttons">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="#contact" class="btn btn-ghost">Contact</a>
+      </div>
+
     </div>
 
-    <div class="rule"></div>
-    <p class="mono" style="color: var(--text-muted); margin-top: 24px; font-size: var(--text-mono-s);">
-      Vaihe 1 valmis — Astro + Tailwind + GSAP ✓
-    </p>
-  </div>
+    <!-- Right column: photo -->
+    <div class="hero-right" id="hero-image">
+      <div class="hero-photo-wrap">
+        <img
+          src="/joona.jpeg"
+          alt="Joona Pankkonen"
+          class="hero-photo"
+          width="440"
+          height="587"
+          loading="eager"
+        />
+        <!-- Bottom fade: blends photo into page background -->
+        <div class="photo-fade-bottom"></div>
+        <!-- Subtle blue glow accent -->
+        <div class="photo-glow"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Divider: hero → experience -->
+  <div class="container section-divider" data-rule-reveal aria-hidden="true"></div>
+
+  <!-- 02 · EXPERIENCE -->
+  <Experience />
+
+  <!-- Divider: experience → stack -->
+  <div class="container section-divider" data-rule-reveal aria-hidden="true"></div>
+
+  <!-- 02 · STACK -->
+  <Stack />
+
+  <!-- Divider: stack → projects -->
+  <div class="container section-divider" data-rule-reveal aria-hidden="true"></div>
+
+  <!-- 03 · PROJECTS -->
+  <Projects />
+
 </Layout>
+
+<style>
+  /* ─── Hero layout ───────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--space-8);
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-8);
+  }
+
+  /* ─── Left column ───────────────────────────────────────────── */
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .hero-eyebrow {
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: var(--text-mono-s);
+    margin-bottom: var(--space-3);
+    opacity: 0;
+  }
+
+  .hero-name {
+    font-size: var(--text-display-xl);
+    color: var(--text);
+    margin-bottom: var(--space-3);
+    opacity: 0;
+  }
+
+  .hero-tagline {
+    font-size: var(--text-body-l);
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 440px;
+    margin-bottom: var(--space-5);
+    font-weight: 300;
+    opacity: 0;
+  }
+
+  /* ─── Status dot ────────────────────────────────────────────── */
+  .hero-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: var(--space-5);
+    opacity: 0;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    animation: pulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.35; }
+  }
+
+  .status-text {
+    color: var(--text-muted);
+    font-size: var(--text-mono-s);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ─── Buttons ───────────────────────────────────────────────── */
+  .hero-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    opacity: 0;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-family: var(--font-body);
+    font-size: var(--text-body-m);
+    font-weight: 500;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--rule);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--text-muted);
+    color: var(--text);
+  }
+
+  /* ─── Right column: photo ───────────────────────────────────── */
+  .hero-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+  }
+
+  .hero-photo-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    border-radius: 16px;
+    overflow: hidden;
+    /* Thin blue accent border */
+    box-shadow:
+      0 0 0 1px var(--rule),
+      0 0 40px 0 rgba(59, 130, 246, 0.08);
+  }
+
+  .hero-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: center top;
+    /* Soften any blur/noise slightly */
+    filter: contrast(1.04) brightness(0.97);
+  }
+
+  /* Gradient fade at the bottom — blends into page bg */
+  .photo-fade-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 45%;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(11, 18, 32, 0.55) 60%,
+      rgba(11, 18, 32, 0.92) 100%
+    );
+    pointer-events: none;
+  }
+
+  /* Subtle blue glow — sits behind the image at the sides */
+  .photo-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.12);
+    pointer-events: none;
+  }
+
+  /* ─── Mobile ────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      padding-top: 100px;
+      gap: var(--space-8);
+    }
+
+    .hero-right {
+      order: -1;
+    }
+
+    .hero-photo-wrap {
+      max-width: 100%;
+    }
+
+    .hero-photo {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  /* ─── Section divider ──────────────────────────────────────── */
+  .section-divider {
+    padding-block: var(--space-3);
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  // ─── Hero load stagger ─────────────────────────────────────
+  gsap.set(['#hero-eyebrow', '#hero-name', '#hero-tagline', '#hero-status', '#hero-buttons', '#hero-image'], {
+    y: 24,
+  });
+
+  const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+
+  tl
+    .to('#hero-eyebrow', { opacity: 1, y: 0, duration: 0.6 }, 0.1)
+    .to('#hero-name',    { opacity: 1, y: 0, duration: 0.7 }, 0.25)
+    .to('#hero-tagline', { opacity: 1, y: 0, duration: 0.6 }, 0.45)
+    .to('#hero-status',  { opacity: 1, y: 0, duration: 0.5 }, 0.6)
+    .to('#hero-buttons', { opacity: 1, y: 0, duration: 0.5 }, 0.7)
+    .to('#hero-image',   { opacity: 1, y: 0, duration: 0.7 }, 0.35);
+
+  // ─── Scroll reveal ─────────────────────────────────────────
+  // Spring easing + 28px lift — all [data-reveal] elements.
+  // Section headers use individual child reveals for stagger.
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (prefersReduced) {
+    document.querySelectorAll('[data-reveal]').forEach((el) => {
+      el.classList.add('is-visible');
+    });
+  } else {
+    // Flicker-resistant reveal controller.
+    //
+    // Two layers of protection against the edge-of-viewport flutter that
+    // used to affect Stack cards at the top of the screen:
+    //
+    //   1. Debounced removal — if an exit event fires but the element
+    //      re-enters within 400ms, the pending removal is cancelled.
+    //   2. Bounding-rect gate — even after the 400ms, we only drop
+    //      `is-visible` if the element is ACTUALLY out of the viewport
+    //      (rect.bottom < 0 || rect.top > innerHeight). A card that is
+    //      still partially visible keeps its revealed state, which kills
+    //      the "bottom-of-card flicker" when sitting near the top edge.
+    //
+    // Replay still works in both directions: once the element is fully
+    // off-screen, is-visible is removed, so the next re-entry re-triggers
+    // the animation.
+    const removeTimers = new WeakMap<Element, ReturnType<typeof setTimeout>>();
+    const REMOVE_DELAY = 400;
+
+    const isFullyOffscreen = (el: Element) => {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      return rect.bottom <= 0 || rect.top >= vh;
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const el = entry.target;
+
+          if (entry.isIntersecting) {
+            // Cancel any pending removal — element came back into view.
+            const pending = removeTimers.get(el);
+            if (pending !== undefined) {
+              clearTimeout(pending);
+              removeTimers.delete(el);
+            }
+            // Double rAF: ensures opacity:0 is painted before the
+            // transition kicks in, so nothing skips.
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                el.classList.add('is-visible');
+              });
+            });
+          } else {
+            // Replace any previous pending timer for this element.
+            const prev = removeTimers.get(el);
+            if (prev !== undefined) clearTimeout(prev);
+
+            const timer = setTimeout(() => {
+              // Gate: only strip is-visible if the element is truly
+              // out of viewport. Prevents flicker when the IO threshold
+              // sits on a card edge.
+              if (isFullyOffscreen(el)) {
+                el.classList.remove('is-visible');
+              }
+              removeTimers.delete(el);
+            }, REMOVE_DELAY);
+            removeTimers.set(el, timer);
+          }
+        });
+      },
+      {
+        rootMargin: '-8% 0px -6% 0px',
+        threshold: 0.06,
+      }
+    );
+
+    document.querySelectorAll('[data-reveal], [data-rule-reveal]').forEach((el) => io.observe(el));
+  }
+</script>
