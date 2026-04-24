@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+/* ─── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ─── Design tokens ────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --bg:              #0B1220;
+  --surface:         #141F38;
+  --surface-raised:  #1A2647;
+  --deep-blue:       #1E3A8A;
+  --primary:         #3B82F6;
+  --primary-soft:    #60A5FA;
+  --amber:           #F59E0B;
+  --text:            #E8EDF5;
+  --text-muted:      #8A94A8;
+  --rule:            #1E2A44;
+
+  /* Typography */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'DM Sans', 'Helvetica Neue', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  /* Type scale */
+  --text-display-xl: clamp(56px, 8vw, 112px);
+  --text-display-l:  clamp(36px, 5vw, 64px);
+  --text-display-m:  clamp(24px, 3vw, 36px);
+  --text-body-l:     19px;
+  --text-body-m:     16px;
+  --text-body-s:     14px;
+  --text-mono-s:     13px;
+
+  /* Spacing (8px base scale) */
+  --space-1:   8px;
+  --space-2:  16px;
+  --space-3:  24px;
+  --space-5:  40px;
+  --space-8:  64px;
+  --space-13: 104px;
+  --space-21: 168px;
+
+  /* Layout */
+  --max-width: 1280px;
+  --gutter:    24px;
+}
+
+/* ─── Base reset & defaults ────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--text-body-m);
+  line-height: 1.55;
+  letter-spacing: -0.005em;
+  min-height: 100vh;
+}
+
+/* ─── Typography base ──────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+code, pre, .mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-s);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Grid container ───────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ─── Hairline dividers ────────────────────────────────────── */
+.rule {
+  width: 100%;
+  height: 1px;
+  background: var(--rule);
+  position: relative;
+}
+
+/* ─── Utility: visually hidden (accessibility) ─────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ─── Reduced motion ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
