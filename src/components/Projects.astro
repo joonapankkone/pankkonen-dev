@@ -24,7 +24,7 @@ const projects: Project[] = [
     title: 'Used Car Price Prediction',
     teaser:
       'Predicting used car prices across 2.6M listings with three ensemble models and honest segment-level results.',
-    tags: ['Python', 'Polars', 'XGBoost', 'CatBoost', 'LightGBM', 'Optuna', 'scikit-learn'],
+    tags: ['Python', 'Polars', 'XGBoost', 'CatBoost', 'LightGBM', 'Optuna', 'scikit-learn', 'Claude', 'ChatGPT'],
     stats: [
       { value: '2.6M',         label: 'rows processed' },
       { value: '3',            label: 'models compared' },
@@ -32,7 +32,7 @@ const projects: Project[] = [
     ],
     paragraphs: [
       'We built a full ML pipeline for used car price prediction — 2.6M rows processed with Polars, feature engineering that explicitly handled survivorship bias and target leakage, and a three-model comparison: XGBoost, CatBoost (ordered boosting), and LightGBM. Bayesian hyperparameter search via Optuna and K-fold cross-validation drove tuning.',
-      'Evaluation went beyond headline metrics — MAE, RMSE, and R² broken down by price band and car type, because segment-level failure modes matter more than aggregate numbers. Limitations are documented honestly. A JAMK coursework project, delivered as a team.',
+      'Evaluation went beyond headline metrics — MAE, RMSE, and R² broken down by price band and car type, because segment-level failure modes matter more than aggregate numbers. Limitations are documented honestly. A JAMK coursework project, delivered as a team — with Claude and ChatGPT sparring across feature engineering, code review, and the writeup.',
     ],
     links: [
       { href: '#', label: 'GitHub', style: 'primary', disabled: true },
@@ -44,7 +44,7 @@ const projects: Project[] = [
     title: 'Future Factory — Team Fearless',
     teaser:
       'Led a 6-person cross-functional team delivering a PrestaShop e-commerce platform across six Agile sprints and four Gate reviews.',
-    tags: ['PrestaShop', 'Docker', 'GitLab CI/CD', 'CSC Allas', 'Scrum'],
+    tags: ['PrestaShop', 'Docker', 'GitLab CI/CD', 'CSC Allas', 'Scrum', 'ChatGPT'],
     stats: [
       { value: '6', label: 'team members' },
       { value: '6', label: 'Agile sprints' },
@@ -65,13 +65,14 @@ const projects: Project[] = [
     title: 'pankkonen.dev',
     teaser:
       'A portfolio built from scratch — Astro, GSAP scroll animations, and a design system inspired by Revolut.',
-    tags: ['Astro', 'Tailwind CSS', 'GSAP', 'Cloudflare Pages', 'TypeScript'],
+    tags: ['Astro', 'Claude', 'Tailwind CSS', 'GSAP', 'TypeScript', 'Cloudflare Pages'],
     stats: [
-      { value: 'Spring',    label: 'scroll easing (0.16, 1, 0.3, 1)' },
-      { value: '3',         label: 'custom Astro components' },
-      { value: 'CF Pages',  label: 'deployment' },
+      { value: 'Spring',         label: 'scroll easing (0.16, 1, 0.3, 1)' },
+      { value: 'Claude Cowork',  label: 'pair-build environment' },
+      { value: 'CF Pages',       label: 'deployment' },
     ],
     paragraphs: [
+      'Built with a clear division of labour: I architected and directed, Claude typed. The whole project ran in Cowork mode — Claude reading and writing files in the workspace directly, while I made the design and direction calls. Every decision — palette, animation parameters, the expanding panel you just clicked open — stayed mine.',
       'Built from scratch with a clear design intent — something a recruiter would remember. Astro handles the build, scoped CSS components keep specificity manageable, and GSAP drives the hero entrance animation. The scroll reveal system uses IntersectionObserver with a double requestAnimationFrame trick to prevent skipped transitions.',
       "Every animation replays on scroll in both directions, spring easing (cubic-bezier 0.16, 1, 0.3, 1) throughout, and the expanding panel you're inside right now was designed before a line of CSS was written. The design system — tokens, typography scale, spacing — lives in global.css and is documented in DESIGN_SPEC.md.",
     ],
@@ -100,29 +101,39 @@ const projects: Project[] = [
     </header>
 
     <!-- ── Card grid ──────────────────────────────────────────── -->
+    <!-- Each card is followed by a mobile-only panel slot. On desktop  -->
+    <!-- the slots are display:none and the single #proj-panel below    -->
+    <!-- the grid carries all expanded content (drawer pattern).        -->
     <div class="proj-grid">
       {projects.map((p, i) => (
-        <article
-          class="proj-card"
-          data-id={p.id}
-          data-active="false"
-          data-reveal
-          data-reveal-delay={String(i + 1)}
-          role="button"
-          tabindex="0"
-          aria-expanded="false"
-          aria-controls="proj-panel"
-        >
-          <span class="proj-expand-icon" aria-hidden="true"></span>
-          <span class="proj-badge mono">{p.badge}</span>
-          <h3 class="proj-card-title">{p.title}</h3>
-          <p class="proj-card-teaser">{p.teaser}</p>
-          <ul class="proj-card-tags" role="list">
-            {p.tags.slice(0, 4).map((tag) => (
-              <li class="proj-tag mono">{tag}</li>
-            ))}
-          </ul>
-        </article>
+        <Fragment>
+          <article
+            class="proj-card"
+            data-id={p.id}
+            data-active="false"
+            data-reveal
+            data-reveal-delay={String(i + 1)}
+            role="button"
+            tabindex="0"
+            aria-expanded="false"
+            aria-controls="proj-panel"
+          >
+            <span class="proj-expand-icon" aria-hidden="true"></span>
+            <span class="proj-badge mono">{p.badge}</span>
+            <h3 class="proj-card-title">{p.title}</h3>
+            <p class="proj-card-teaser">{p.teaser}</p>
+            <ul class="proj-card-tags" role="list">
+              {p.tags.slice(0, 4).map((tag) => (
+                <li class="proj-tag mono">{tag}</li>
+              ))}
+            </ul>
+          </article>
+          <div
+            class="proj-panel-mobile"
+            data-panel-for={p.id}
+            aria-hidden="true"
+          ></div>
+        </Fragment>
       ))}
     </div>
 
@@ -353,6 +364,15 @@ const projects: Project[] = [
     transition: height 500ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
+  /* Mobile-only inline panel slots (one per card). Hidden on    */
+  /* desktop; CSS toggle in the @media block below.              */
+  .proj-panel-mobile {
+    display: none;
+    height: 0;
+    overflow: hidden;
+    transition: height 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
   .proj-panel-inner {
     display: grid;
     grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
@@ -536,6 +556,10 @@ const projects: Project[] = [
     .proj-heading { grid-column: 1 / -1; font-size: 40px; }
     .proj-lede    { grid-column: 1 / -1; justify-self: start; }
 
+    /* Swap drawer for inline-after-card panels */
+    #proj-panel        { display: none; }
+    .proj-panel-mobile { display: block; }
+
     .proj-panel-inner {
       grid-template-columns: 1fr;
       gap: var(--space-5);
@@ -559,22 +583,49 @@ const projects: Project[] = [
 </style>
 
 <script>
-  const cards = document.querySelectorAll<HTMLElement>('.proj-card');
-  const panel  = document.getElementById('proj-panel') as HTMLElement;
+  // ─────────────────────────────────────────────────────────────
+  //  Project card → panel interaction.
+  //
+  //  Desktop (>768px): single shared #proj-panel below the grid
+  //    acts as a drawer. Clicking another card crossfades content.
+  //
+  //  Mobile (≤768px): each card has its own .proj-panel-mobile
+  //    slot rendered immediately after it. Clicking a card opens
+  //    that slot directly below — no scroll-jump, finger-and-eye
+  //    stay anchored to the same spot. Swap = sequential close +
+  //    open (different DOM nodes, no crossfade possible).
+  // ─────────────────────────────────────────────────────────────
+
+  const cards         = document.querySelectorAll<HTMLElement>('.proj-card');
+  const desktopPanel  = document.getElementById('proj-panel') as HTMLElement;
+  const mobileMQ      = window.matchMedia('(max-width: 768px)');
+
   let activeId: string | null = null;
 
   const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
   const raf   = () => new Promise<void>((r) => requestAnimationFrame(r));
 
-  /** Clone a project's <template> content into the panel. */
+  /** Pick the right panel element for a given card id, by viewport. */
+  function getPanelFor(id: string): HTMLElement {
+    if (mobileMQ.matches) {
+      return document.querySelector<HTMLElement>(
+        `.proj-panel-mobile[data-panel-for="${id}"]`
+      )!;
+    }
+    return desktopPanel;
+  }
+
+  /** Clone a project's <template> content into the right panel. */
   function injectContent(id: string) {
-    const tpl = document.getElementById(`tpl-${id}`) as HTMLTemplateElement;
+    const panel = getPanelFor(id);
+    const tpl   = document.getElementById(`tpl-${id}`) as HTMLTemplateElement;
     panel.innerHTML = '';
     panel.appendChild(tpl.content.cloneNode(true));
   }
 
   /** Stagger .panel-reveal children into view. */
-  function staggerReveal() {
+  function staggerReveal(id: string) {
+    const panel = getPanelFor(id);
     const items = panel.querySelectorAll<HTMLElement>('.panel-reveal');
     items.forEach((el, i) => {
       setTimeout(() => el.classList.add('is-shown'), 80 + i * 80);
@@ -591,6 +642,7 @@ const projects: Project[] = [
   }
 
   async function openPanel(id: string) {
+    const panel = getPanelFor(id);
     injectContent(id);
     panel.setAttribute('aria-hidden', 'false');
 
@@ -601,16 +653,33 @@ const projects: Project[] = [
 
     panel.addEventListener(
       'transitionend',
-      (e) => { if ((e as TransitionEvent).propertyName === 'height') panel.style.height = 'auto'; },
+      (e) => {
+        if ((e as TransitionEvent).propertyName !== 'height') return;
+        panel.style.height = 'auto';
+        // Mobile only: anchor active card's title at top of viewport
+        // so the user sees both the card header and the start of
+        // the panel content (otherwise the tap target leaves their
+        // eye-line as content pushes down).
+        if (mobileMQ.matches) {
+          const card = document.querySelector<HTMLElement>(
+            `.proj-card[data-id="${id}"]`
+          );
+          card?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      },
       { once: true }
     );
 
     activeId = id;
     setActive(id);
-    staggerReveal();
+    staggerReveal(id);
   }
 
-  function closePanel() {
+  function closePanel(id?: string | null) {
+    const target = id ?? activeId;
+    if (!target) return;
+    const panel = getPanelFor(target);
+
     // height: auto → px so CSS can transition px → 0
     panel.style.height = panel.scrollHeight + 'px';
     requestAnimationFrame(() => { panel.style.height = '0'; });
@@ -626,12 +695,27 @@ const projects: Project[] = [
       { once: true }
     );
 
-    activeId = null;
-    setActive(null);
+    if (target === activeId) {
+      activeId = null;
+      setActive(null);
+    }
   }
 
-  async function swapPanel(id: string) {
-    // 1. Fade out current content
+  async function swapPanel(newId: string) {
+    // Mobile path: each card owns its panel — sequential close + open.
+    // The two height animations run concurrently on different DOM nodes,
+    // which feels responsive without needing a crossfade.
+    if (mobileMQ.matches) {
+      const prevId = activeId;
+      if (prevId) closePanel(prevId);
+      await sleep(180);          // small overlap before new panel opens
+      await openPanel(newId);
+      return;
+    }
+
+    // Desktop path: shared panel — crossfade content + height adjust.
+    const panel = desktopPanel;
+
     const oldInner = panel.querySelector<HTMLElement>('.proj-panel-inner');
     if (oldInner) {
       oldInner.style.transition = 'opacity 150ms ease';
@@ -639,14 +723,12 @@ const projects: Project[] = [
       await sleep(150);
     }
 
-    // 2. Inject new content, start invisible
-    injectContent(id);
+    injectContent(newId);
     const newInner = panel.querySelector<HTMLElement>('.proj-panel-inner')!;
     newInner.style.opacity = '0';
 
-    // 3. Adjust height to new content
     await raf();
-    const newH    = panel.scrollHeight;
+    const newH     = panel.scrollHeight;
     const currentH = panel.offsetHeight;
     panel.style.height = currentH + 'px';
     requestAnimationFrame(() => { panel.style.height = newH + 'px'; });
@@ -657,18 +739,40 @@ const projects: Project[] = [
       { once: true }
     );
 
-    // 4. Fade in
     requestAnimationFrame(() => {
       newInner.style.transition = 'opacity 300ms ease';
       newInner.style.opacity = '1';
     });
 
-    activeId = id;
-    setActive(id);
-    staggerReveal();
+    activeId = newId;
+    setActive(newId);
+    staggerReveal(newId);
   }
 
-  // ── Wire up cards ──────────────────────────────────────────
+  // ── Viewport-change handling ───────────────────────────────────
+  // If the user resizes/rotates with a card open, the previously-
+  // visible panel becomes display:none. Re-render content into the
+  // newly-visible panel so the open state survives the transition.
+  mobileMQ.addEventListener('change', () => {
+    if (!activeId) return;
+    const id = activeId;
+
+    // Reset every panel slot — contents move to the right one on re-open
+    desktopPanel.style.height = '';
+    desktopPanel.innerHTML = '';
+    desktopPanel.setAttribute('aria-hidden', 'true');
+    document.querySelectorAll<HTMLElement>('.proj-panel-mobile').forEach((p) => {
+      p.style.height = '';
+      p.innerHTML = '';
+      p.setAttribute('aria-hidden', 'true');
+    });
+
+    activeId = null;
+    setActive(null);
+    openPanel(id);
+  });
+
+  // ── Wire up cards ──────────────────────────────────────────────
   cards.forEach((card) => {
     card.addEventListener('click', () => {
       const id = card.dataset.id!;

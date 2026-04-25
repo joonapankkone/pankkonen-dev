@@ -45,6 +45,17 @@ const categories: Category[] = [
       { name: 'Linux',        note: 'servers + scripting'  },
     ],
   },
+  {
+    index: 'IV',
+    title: 'AI Workflow',
+    subtitle: 'The pair across the desk.',
+    items: [
+      { name: 'Claude',         note: 'pair on big builds'    },
+      { name: 'Claude Code',    note: 'agent at the keyboard' },
+      { name: 'ChatGPT',        note: 'code + writing polish' },
+      { name: 'GitHub Copilot', note: 'the office pair'       },
+    ],
+  },
 ];
 ---
 
@@ -145,7 +156,7 @@ const categories: Category[] = [
   /* ─── Category grid ───────────────────────────────────────── */
   .stack-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-3);
     margin-top: var(--space-5);
   }

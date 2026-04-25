@@ -236,6 +236,9 @@ import Projects from '../components/Projects.astro';
 
     .hero-photo {
       aspect-ratio: 4 / 3;
+      /* Drop the framing window so the face sits closer to centre on  */
+      /* the wider mobile crop (4/3) instead of clinging to the top.    */
+      object-position: center 30%;
     }
   }
 
