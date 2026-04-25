@@ -151,49 +151,14 @@ import Projects from '../components/Projects.astro';
   }
 
   /* ─── Buttons ───────────────────────────────────────────────── */
+  /* All `.btn`, `.btn-primary`, `.btn-ghost` rules live in           */
+  /* src/styles/global.css so the hero CTAs share the same hover     */
+  /* polish as the project-panel CTAs. Local scope kept minimal.     */
   .hero-buttons {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
     opacity: 0;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-family: var(--font-body);
-    font-size: var(--text-body-m);
-    font-weight: 500;
-    text-decoration: none;
-    transition: opacity 0.2s, transform 0.2s;
-    cursor: pointer;
-  }
-
-  .btn:hover {
-    transform: translateY(-1px);
-  }
-
-  .btn-primary {
-    background: var(--primary);
-    color: #fff;
-    border: none;
-  }
-
-  .btn-primary:hover {
-    opacity: 0.9;
-  }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--text-muted);
-    border: 1px solid var(--rule);
-  }
-
-  .btn-ghost:hover {
-    border-color: var(--text-muted);
-    color: var(--text);
   }
 
   /* ─── Right column: photo ───────────────────────────────────── */

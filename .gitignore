@@ -25,3 +25,4 @@ pnpm-debug.log*
 
 # agent scratchpad (local brainstorm notes, not source)
 .superpowers/
+dist.stale.*/
