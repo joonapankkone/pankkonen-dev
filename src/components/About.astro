@@ -1,0 +1,337 @@
+---
+// About — Section 04
+// Beyond the Code — Section 05
+// Two sections in one component:
+//   - About: prose-only, two-column body grid on desktop
+//   - Beyond the Code: full-bleed background video stage (treatment 3A) on
+//     desktop, letterbox card on mobile. Video gated by IntersectionObserver
+//     and respects prefers-reduced-motion.
+// Video assets live in public/: btc-sim.{webm,mp4}, btc-sim-mobile.mp4,
+// btc-sim-poster.jpg. See docs/superpowers/specs/2026-05-01-beyond-fullbleed-and-copy-design.md.
+---
+
+<!-- ── 04 · ABOUT ──────────────────────────────────────────────────── -->
+<section class="about" id="about">
+  <div class="container about-wrap">
+
+    <header class="about-header">
+      <p class="section-index mono" data-reveal>04 · About</p>
+      <h2 class="about-heading" data-reveal data-reveal-delay="1">
+        Building toward<br />
+        <span class="about-accent">data</span> and
+        <span class="about-accent">AI</span>.
+      </h2>
+    </header>
+
+    <div class="about-body">
+      <p class="about-para" data-reveal data-reveal-delay="2">
+        I'm studying IT Engineering at JAMK in Jyväskylä, specialising in AI and
+        data analytics. Alongside studies, I'm an IT Trainee at Harvia — Intune,
+        device management, and help desk on the day-to-day, plus a hand in
+        larger IT projects across the company.
+      </p>
+      <p class="about-para" data-reveal data-reveal-delay="3">
+        Academically the focus is data — large-scale ML pipelines, multi-model
+        comparisons with Bayesian tuning, evaluation that breaks results down
+        by segment rather than stopping at a headline number. The direction
+        I'm pointing at is a junior data or AI role — somewhere outputs have
+        to be right, not just plausible.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Divider: about → beyond the code -->
+<div class="container section-divider" data-rule-reveal aria-hidden="true"></div>
+
+<!-- ── 05 · BEYOND THE CODE — full-bleed video stage ─────────────── -->
+<section class="beyond" id="beyond">
+  <video
+    class="beyond-video"
+    autoplay
+    loop
+    muted
+    playsinline
+    preload="metadata"
+    poster="/btc-sim-poster.jpg"
+    aria-hidden="true"
+    data-beyond-video
+  >
+    <source src="/btc-sim-mobile.mp4" type="video/mp4" media="(max-width: 768px)" />
+    <source src="/btc-sim.webm" type="video/webm" />
+    <source src="/btc-sim.mp4" type="video/mp4" />
+  </video>
+  <div class="beyond-scrim" aria-hidden="true"></div>
+  <div class="container beyond-inner">
+    <p class="section-index mono" data-reveal>05 · Beyond the Code</p>
+    <h2 class="beyond-heading" data-reveal data-reveal-delay="1">
+      Not just<br />
+      <span class="beyond-accent">at the keyboard</span>.
+    </h2>
+    <p class="beyond-para" data-reveal data-reveal-delay="2">
+      Two-time DiRT Rally world champion with a competitive sim racing background.
+    </p>
+    <p class="beyond-para" data-reveal data-reveal-delay="3">
+      These days, I keep busy with gym training, outdoor activities, open water
+      swimming, and Latin dance.
+    </p>
+  </div>
+</section>
+
+<style>
+  /* ─── 04 · About layout ──────────────────────────────────── */
+  .about {
+    padding-block: var(--space-13) var(--space-13);
+  }
+
+  .about-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8);
+  }
+
+  .about-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-8);
+    align-items: end;
+    margin-bottom: var(--space-3);
+  }
+
+  .about-header .section-index {
+    grid-column: 1 / -1;
+    margin-bottom: var(--space-3);
+  }
+
+  .about-heading {
+    grid-column: 1 / 2;
+    font-size: var(--text-display-l);
+    color: var(--text);
+    line-height: 1.02;
+  }
+
+  .about-accent {
+    color: var(--primary-soft);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  /* 2-column prose grid — gives a natural measure on wide screens */
+  .about-body {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+
+  .about-para {
+    color: var(--text-muted);
+    font-size: var(--text-body-l);
+    line-height: 1.65;
+  }
+
+  /* ─── 05 · Beyond the Code — full-bleed video stage ─────── */
+  .beyond {
+    position: relative;
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    padding-inline: 0;
+    height: min(80vh, 720px);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .beyond-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+    display: block;
+  }
+
+  .beyond-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(8, 8, 10, 0.35) 0%,
+      rgba(8, 8, 10, 0.55) 40%,
+      rgba(8, 8, 10, 0.92) 85%,
+      rgba(8, 8, 10, 0.96) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .beyond-inner {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-block-end: var(--space-10);
+    gap: var(--space-3);
+  }
+
+  .beyond-inner .section-index {
+    margin: 0;
+  }
+
+  .beyond-heading {
+    font-size: var(--text-display-l);
+    color: var(--text);
+    line-height: 1.02;
+    margin: var(--space-2) 0 var(--space-5);
+  }
+
+  .beyond-accent {
+    color: var(--primary-soft);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .beyond-para {
+    color: var(--text-muted);
+    font-size: var(--text-body-l);
+    line-height: 1.65;
+    max-width: 56ch;
+    margin: 0;
+  }
+
+  /* ─── Scroll reveal ──────────────────────────────────────── */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-reveal][data-reveal-delay="1"] { transition-delay: 80ms; }
+  [data-reveal][data-reveal-delay="2"] { transition-delay: 160ms; }
+  [data-reveal][data-reveal-delay="3"] { transition-delay: 240ms; }
+  [data-reveal][data-reveal-delay="4"] { transition-delay: 320ms; }
+
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── Mobile ─────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .about {
+      padding-block: var(--space-8) var(--space-8);
+    }
+
+    .about-header {
+      grid-template-columns: 1fr;
+    }
+
+    .about-heading {
+      grid-column: 1 / -1;
+    }
+
+    .about-body {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+
+    /* Beyond — revert to natural document flow on mobile (video on top, then text) */
+    .beyond {
+      width: 100%;
+      max-width: 100%;
+      margin-inline: 0;
+      padding-inline: var(--space-5);
+      padding-block: var(--space-8);
+      height: auto;
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+
+    .beyond-video {
+      position: static;
+      width: 100%;
+      max-width: 480px;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      border-radius: 14px;
+      box-shadow: 0 0 0 1px var(--rule);
+      object-fit: cover;
+      align-self: center;
+    }
+
+    .beyond-scrim {
+      display: none;
+    }
+
+    .beyond-inner {
+      padding-block-end: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      height: auto;
+    }
+
+    .beyond-inner .beyond-heading {
+      margin-block: 0 var(--space-2);
+    }
+  }
+</style>
+
+<script>
+  // Gates the Beyond background video on viewport entry/exit:
+  //   - Plays when the section is (about to be) visible
+  //   - Pauses when fully off-screen (saves CPU + battery)
+  //   - Respects prefers-reduced-motion: never starts the clip,
+  //     leaves the poster image as the visible state
+  const initBeyondVideo = () => {
+    const video = document.querySelector<HTMLVideoElement>('[data-beyond-video]');
+    if (!video) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      // Strip autoplay so the browser doesn't begin playback even briefly,
+      // and explicitly pause in case some attribute hot-path already kicked in.
+      video.removeAttribute('autoplay');
+      try { video.pause(); } catch {}
+      return;
+    }
+
+    const section = video.closest('section');
+    if (!section) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // play() returns a Promise that may reject under iOS autoplay
+            // policy — swallow it; the user will still see the poster.
+            const p = video.play();
+            if (p && typeof p.catch === 'function') p.catch(() => {});
+          } else {
+            video.pause();
+          }
+        });
+      },
+      {
+        rootMargin: '10% 0px 10% 0px',
+        threshold: 0,
+      }
+    );
+
+    io.observe(section);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBeyondVideo, { once: true });
+  } else {
+    initBeyondVideo();
+  }
+</script>

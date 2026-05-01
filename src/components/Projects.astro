@@ -31,11 +31,11 @@ const projects: Project[] = [
       { value: 'K-fold + Optuna', label: 'hyperparameter search' },
     ],
     paragraphs: [
-      'We built a full ML pipeline for used car price prediction — 2.6M rows processed with Polars, feature engineering that explicitly handled survivorship bias and target leakage, and a three-model comparison: XGBoost, CatBoost (ordered boosting), and LightGBM. Bayesian hyperparameter search via Optuna and K-fold cross-validation drove tuning.',
-      'Evaluation went beyond headline metrics — MAE, RMSE, and R² broken down by price band and car type, because segment-level failure modes matter more than aggregate numbers. Limitations are documented honestly. A JAMK coursework project, delivered as a team — with Claude and ChatGPT sparring across feature engineering, code review, and the writeup.',
+      'We built a full ML pipeline for used car price prediction: 2.6M rows processed with Polars, careful feature engineering to avoid target leakage, and a three-model comparison between XGBoost, CatBoost (ordered boosting), and LightGBM. Tuning ran through Optuna\'s Bayesian search with K-fold cross-validation.',
+      'Evaluation broke results down by price band and car type rather than stopping at headline numbers — MAE, RMSE, and R² by segment, because that\'s where model failure actually shows up. The dataset has a structural survivorship bias: only sold cars appear, which ruled out sale time as a target. A JAMK coursework project, delivered as a team — with Claude and ChatGPT sparring across feature engineering, code review, and the writeup.',
     ],
     links: [
-      { href: '#', label: 'GitHub', style: 'primary', disabled: true },
+      { href: 'https://aida-project.onrender.com/', label: 'Live Demo', style: 'primary', disabled: false },
     ],
   },
   {
