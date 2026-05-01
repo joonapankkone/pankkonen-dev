@@ -45,37 +45,40 @@
 <!-- Divider: about → beyond the code -->
 <div class="container section-divider" data-rule-reveal aria-hidden="true"></div>
 
-<!-- ── 05 · BEYOND THE CODE — full-bleed video stage ─────────────── -->
+<!-- ── 05 · BEYOND THE CODE — full-bleed frame + 16:9 video stage ── -->
 <section class="beyond" id="beyond">
-  <video
-    class="beyond-video"
-    autoplay
-    loop
-    muted
-    playsinline
-    preload="metadata"
-    poster="/btc-sim-poster.jpg"
-    aria-hidden="true"
-    data-beyond-video
-  >
-    <source src="/btc-sim-mobile.mp4" type="video/mp4" media="(max-width: 768px)" />
-    <source src="/btc-sim.webm" type="video/webm" />
-    <source src="/btc-sim.mp4" type="video/mp4" />
-  </video>
-  <div class="beyond-scrim" aria-hidden="true"></div>
-  <div class="container beyond-inner">
-    <p class="section-index mono" data-reveal>05 · Beyond the Code</p>
-    <h2 class="beyond-heading" data-reveal data-reveal-delay="1">
-      Not just<br />
-      <span class="beyond-accent">at the keyboard</span>.
-    </h2>
-    <p class="beyond-para" data-reveal data-reveal-delay="2">
-      Two-time DiRT Rally world champion with a competitive sim racing background.
-    </p>
-    <p class="beyond-para" data-reveal data-reveal-delay="3">
-      These days, I keep busy with gym training, outdoor activities, open water
-      swimming, and Latin dance.
-    </p>
+  <div class="beyond-stage">
+    <video
+      class="beyond-video"
+      autoplay
+      loop
+      muted
+      playsinline
+      preload="metadata"
+      poster="/btc-sim-poster.jpg"
+      aria-hidden="true"
+      data-beyond-video
+    >
+      <source src="/btc-sim-mobile.mp4" type="video/mp4" media="(max-width: 768px)" />
+      <source src="/btc-sim.mp4" type="video/mp4" />
+    </video>
+    <div class="beyond-scrim" aria-hidden="true"></div>
+    <div class="beyond-inner">
+      <div class="container">
+        <p class="section-index mono" data-reveal>05 · Beyond the Code</p>
+        <h2 class="beyond-heading" data-reveal data-reveal-delay="1">
+          A competitive mindset,<br />
+          <span class="beyond-accent">applied beyond code</span>.
+        </h2>
+        <p class="beyond-para" data-reveal data-reveal-delay="2">
+          Two-time DiRT Rally world champion with a competitive sim racing background.
+        </p>
+        <p class="beyond-para" data-reveal data-reveal-delay="3">
+          These days, I keep busy with gym training, outdoor activities, open water
+          swimming, and Latin dance.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -130,14 +133,26 @@
     line-height: 1.65;
   }
 
-  /* ─── 05 · Beyond the Code — full-bleed video stage ─────── */
+  /* ─── 05 · Beyond the Code — outer frame + 16:9 stage ────── */
+  /* Outer frame is full-bleed (100vw); stage caps width so the video
+     always renders at 16:9 with no crop, regardless of viewport.
+     On screens wider than calc(85vh * 16/9), the page bg shows on
+     the sides of the stage — same pattern as Linear / Vercel hero
+     sections. On screens narrower than that threshold, stage fills
+     the viewport edge to edge. */
   .beyond {
-    position: relative;
     width: 100vw;
     max-width: 100vw;
     margin-inline: calc(50% - 50vw);
     padding-inline: 0;
-    height: min(80vh, 720px);
+    display: flex;
+    justify-content: center;
+  }
+
+  .beyond-stage {
+    position: relative;
+    width: min(100vw, calc(85vh * 16 / 9));
+    aspect-ratio: 16 / 9;
     overflow: hidden;
     isolation: isolate;
   }
@@ -168,13 +183,18 @@
   }
 
   .beyond-inner {
-    position: relative;
+    position: absolute;
+    inset: 0;
     z-index: 2;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     padding-block-end: var(--space-10);
+  }
+
+  .beyond-inner > .container {
+    display: flex;
+    flex-direction: column;
     gap: var(--space-3);
   }
 
@@ -248,8 +268,14 @@
       margin-inline: 0;
       padding-inline: var(--space-5);
       padding-block: var(--space-8);
-      height: auto;
+      display: block;
+    }
+
+    .beyond-stage {
+      width: 100%;
+      aspect-ratio: auto;
       overflow: visible;
+      isolation: auto;
       display: flex;
       flex-direction: column;
       gap: var(--space-6);
@@ -272,11 +298,13 @@
     }
 
     .beyond-inner {
+      position: static;
       padding-block-end: 0;
-      display: flex;
-      flex-direction: column;
+      display: block;
+    }
+
+    .beyond-inner > .container {
       gap: var(--space-3);
-      height: auto;
     }
 
     .beyond-inner .beyond-heading {
