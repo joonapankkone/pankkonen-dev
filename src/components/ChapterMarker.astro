@@ -1,0 +1,273 @@
+---
+// Sticky chapter marker — Progress timeline + hover-expand label
+//
+// Right-side fixed wayfinding. A single thin vertical line with
+// 5 ticks for sections. An amber fill grows from the top of the
+// line as the user scrolls the page. Default state: only the active
+// section's number is visible (e.g. "03"). Hover any link to expand
+// it into the full label ("03 · Projects" / "04 · Beyond").
+//
+// Hidden during hero — fades in once the user crosses into Experience.
+// Hidden near the footer (≥90% scroll) so it doesn't fight the
+// contact CTA. Hidden on viewports ≤900px.
+//
+// Because the resting state is just a 7px tick, this layout never
+// collides with body copy at any width — no narrow-desktop collapse
+// logic needed.
+
+const sections = [
+  { id: 'experience', n: '01', label: 'Experience'      },
+  { id: 'stack',      n: '02', label: 'Stack'           },
+  { id: 'projects',   n: '03', label: 'Projects'        },
+  { id: 'beyond',     n: '04', label: 'Beyond the Code' },
+  { id: 'contact',    n: '05', label: 'Contact'         },
+];
+---
+
+<nav class="chapter-nav" aria-label="Sections">
+  <span class="ch-track" aria-hidden="true"></span>
+  <span class="ch-fill"  aria-hidden="true"></span>
+
+  {sections.map((s) => (
+    <a href={`#${s.id}`} class="ch-link" data-id={s.id}>
+      <span class="ch-grow ch-grow-num"><span class="mono ch-num">{s.n}</span></span>
+      <span class="ch-grow ch-grow-name"><span class="mono ch-name">{s.label}</span></span>
+      <span class="ch-tick" aria-hidden="true"></span>
+    </a>
+  ))}
+</nav>
+
+<style>
+  /* ─── Container ─────────────────────────────────────────── */
+  .chapter-nav {
+    position: fixed;
+    top: 50%;
+    right: 28px;
+    transform: translate(20px, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    z-index: 50;
+    padding: 14px 0;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity   480ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 480ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .chapter-nav.visible {
+    opacity: 1;
+    transform: translate(0, -50%);
+    pointer-events: auto;
+  }
+
+  /* ─── Vertical track + amber scroll fill ────────────────── */
+  /* The track is the static rule. The fill is the amber segment
+     that grows from the top as the user scrolls — its height is
+     set in JS based on document scroll percentage. The right:0
+     anchor keeps both pinned to the same column as the ticks. */
+  .ch-track,
+  .ch-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 3px;            /* aligns with the right edge of each tick */
+    width: 1px;
+    pointer-events: none;
+  }
+
+  .ch-track {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      var(--rule) 8%,
+      var(--rule) 92%,
+      transparent 100%
+    );
+  }
+
+  .ch-fill {
+    bottom: auto;
+    height: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      var(--amber) 18%,
+      var(--amber) 100%
+    );
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+    transition: height 480ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ─── Each link row ─────────────────────────────────────── */
+  /* Tick anchored right (by the line). Num and name live in
+     0fr→1fr grid wrappers so they animate to their EXACT
+     rendered width — no max-width overshoot, no abrupt snap
+     when hovering the active link. */
+  .ch-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 12px;
+    text-decoration: none;
+    color: inherit;
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  /* Wrappers that grow from 0 to content-width using the
+     grid-template-columns 0fr → 1fr pattern. Modern browsers
+     interpolate fr-units smoothly; result is a graceful
+     content-aware width transition that beats max-width tricks. */
+  .ch-grow {
+    display: grid;
+    grid-template-columns: 0fr;
+    transition: grid-template-columns 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ch-grow > * {
+    overflow: hidden;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  /* Active: num column is open. Hovered link: num AND name open. */
+  .ch-link.active .ch-grow-num,
+  .ch-link:hover .ch-grow-num {
+    grid-template-columns: 1fr;
+  }
+  .ch-link:hover .ch-grow-name {
+    grid-template-columns: 1fr;
+  }
+
+  /* ─── Tick ──────────────────────────────────────────────── */
+  .ch-tick {
+    width: 7px;
+    height: 1px;
+    background: var(--text-muted);
+    opacity: 0.45;
+    flex-shrink: 0;
+    margin-left: 8px;     /* always-on gap between label and tick */
+    transition:
+      width      360ms cubic-bezier(0.22, 1, 0.36, 1),
+      background 240ms ease,
+      opacity    240ms ease,
+      box-shadow 240ms ease;
+  }
+
+  .ch-link.active .ch-tick,
+  .ch-link:hover .ch-tick {
+    width: 18px;
+    background: var(--amber);
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+  }
+
+  /* ─── Number + name typography (visibility tied to wrapper) */
+  .ch-num,
+  .ch-name {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    line-height: 1;
+    /* Opacity fades in on top of the width transition for a
+       slightly softer arrival — finishes earlier so text appears
+       before its slot fully completes. */
+    opacity: 0;
+    transition: opacity 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ch-link.active .ch-num,
+  .ch-link:hover .ch-num,
+  .ch-link:hover .ch-name {
+    opacity: 1;
+  }
+
+  /* Padding-right inside each label cell creates the visual
+     gap between num/name/tick — and is clipped to 0 along
+     with the text when the wrapper is collapsed. */
+  .ch-num  { padding-right: 6px; }
+  .ch-name { padding-left:  6px; }
+
+  .ch-name::before {
+    content: "·";
+    margin-right: 6px;
+    color: var(--amber);
+    opacity: 0.7;
+  }
+
+  /* ─── Hide on tablet + below ────────────────────────────── */
+  @media (max-width: 900px) {
+    .chapter-nav { display: none; }
+  }
+</style>
+
+<script>
+  // ─── Active section tracking ───────────────────────────────
+  const sections = document.querySelectorAll<HTMLElement>('section[id]');
+  const links    = document.querySelectorAll<HTMLAnchorElement>('.ch-link');
+
+  const setActive = (id: string) => {
+    links.forEach((a) => a.classList.toggle('active', a.dataset.id === id));
+  };
+
+  const sectionIO = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const id = (e.target as HTMLElement).id;
+        if (id) setActive(id);
+      });
+    },
+    { rootMargin: '-40% 0px -50% 0px' }
+  );
+  sections.forEach((s) => sectionIO.observe(s));
+
+  // ─── Progress fill — amber segment grows with page scroll ──
+  const fill = document.querySelector<HTMLElement>('.ch-fill');
+  const updateFill = () => {
+    if (!fill) return;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? Math.max(0, Math.min(1, window.scrollY / max)) : 0;
+    fill.style.height = `${pct * 100}%`;
+  };
+
+  // ─── Hero / footer gates ───────────────────────────────────
+  const nav  = document.querySelector<HTMLElement>('.chapter-nav');
+  const hero = document.querySelector<HTMLElement>('#hero');
+
+  if (nav && hero) {
+    let pastHero = false;
+    let nearFooter = false;
+
+    const update = () => {
+      if (pastHero && !nearFooter) nav.classList.add('visible');
+      else nav.classList.remove('visible');
+    };
+
+    const heroIO = new IntersectionObserver(
+      ([entry]) => {
+        pastHero = !entry.isIntersecting;
+        update();
+      },
+      { threshold: 0.1 }
+    );
+    heroIO.observe(hero);
+
+    const onScroll = () => {
+      const scrolled = window.scrollY + window.innerHeight;
+      const total    = document.documentElement.scrollHeight;
+      nearFooter = scrolled / total >= 0.9;
+      update();
+      updateFill();
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  } else {
+    // No hero — at least keep the fill in sync.
+    window.addEventListener('scroll', updateFill, { passive: true });
+    updateFill();
+  }
+</script>

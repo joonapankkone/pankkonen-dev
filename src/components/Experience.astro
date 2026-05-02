@@ -1,6 +1,7 @@
 ---
-// Experience — Section 02
-// Unified timeline: work and studies together.
+// Experience — Section 01
+// Two-track split: Work (left) | Study (right).
+// Reads faster than a unified timeline — paths compared at a glance.
 // Ref: DESIGN_SPEC.md §4, §5, §6, §7.
 
 type Entry = {
@@ -53,6 +54,12 @@ const entries: Entry[] = [
     kind: 'study',
   },
 ];
+
+const work  = entries.filter((e) => e.kind === 'work');
+const study = entries.filter((e) => e.kind === 'study');
+const workHasCurrent  = work.some((e) => e.current);
+const studyHasCurrent = study.some((e) => e.current);
+const rows = Math.max(work.length, study.length);
 ---
 
 <section class="exp" id="experience" aria-labelledby="exp-heading">
@@ -71,35 +78,67 @@ const entries: Entry[] = [
       </p>
     </header>
 
-    <ol class="timeline" role="list">
-      {entries.map((e, i) => (
-        <li class="tl-entry" data-kind={e.kind} data-current={e.current ? 'true' : 'false'} data-reveal data-reveal-delay={String(i + 1)}>
-          <div class="tl-rail" aria-hidden="true">
-            <span class="tl-node">
-              {e.current && <span class="tl-node-pulse"></span>}
-            </span>
-          </div>
+    <!-- Two-track grid. Headers occupy row 1, then each row slot
+         (row 2..N+1) is shared across both columns so work[i] and
+         study[i] size to the same height — Road Closing lines up
+         with Vocational ICT regardless of description length. -->
+    <div class="exp-tracks" data-reveal data-reveal-delay="3" data-stacked={rows}>
 
-          <div class="tl-meta">
-            <span class="mono tl-period">{e.period}</span>
-            <span class={`mono tl-kind tl-kind-${e.kind}`}>
-              {e.kind === 'work' ? '◆ Work' : '◇ Study'}
-            </span>
-            {e.current && <span class="mono tl-chip">Current</span>}
-          </div>
+      <header class="track-head" data-track="work" data-col="1">
+        <span class="mono track-glyph">◆ Work</span>
+        {workHasCurrent && <span class="track-pulse" aria-hidden="true"></span>}
+        <span class="mono track-count">{work.length} {work.length === 1 ? 'entry' : 'entries'}</span>
+      </header>
 
-          <div class="tl-body">
-            <h3 class="tl-role">{e.role}</h3>
-            <p class="tl-company">
-              <span class="tl-company-name">{e.company}</span>
-              {e.location && <span class="tl-divider" aria-hidden="true">·</span>}
-              {e.location && <span class="tl-location mono">{e.location}</span>}
-            </p>
-            {e.description && <p class="tl-desc">{e.description}</p>}
+      <header class="track-head" data-track="study" data-col="2">
+        <span class="mono track-glyph track-glyph-study">◇ Study</span>
+        {studyHasCurrent && <span class="track-pulse" aria-hidden="true"></span>}
+        <span class="mono track-count">{study.length} {study.length === 1 ? 'entry' : 'entries'}</span>
+      </header>
+
+      {work.map((e, i) => (
+        <article class="entry" data-current={e.current ? 'true' : 'false'} data-col="1" data-row={i + 2}>
+          <div class="entry-meta">
+            <span class="mono entry-period">{e.period}</span>
+            {e.current && (
+              <span class="entry-current">
+                <span class="entry-pulse" aria-hidden="true"></span>
+                <span class="mono entry-current-label">Current</span>
+              </span>
+            )}
           </div>
-        </li>
+          <h3 class="entry-role">{e.role}</h3>
+          <p class="entry-company">
+            <span class="entry-company-name">{e.company}</span>
+            {e.location && <span class="entry-divider" aria-hidden="true">·</span>}
+            {e.location && <span class="entry-location mono">{e.location}</span>}
+          </p>
+          {e.description && <p class="entry-desc">{e.description}</p>}
+        </article>
       ))}
-    </ol>
+
+      {study.map((e, i) => (
+        <article class="entry" data-current={e.current ? 'true' : 'false'} data-col="2" data-row={i + 2}>
+          <div class="entry-meta">
+            <span class="mono entry-period">{e.period}</span>
+            {e.current && (
+              <span class="entry-current">
+                <span class="entry-pulse" aria-hidden="true"></span>
+                <span class="mono entry-current-label">Current</span>
+              </span>
+            )}
+          </div>
+          <h3 class="entry-role">{e.role}</h3>
+          <p class="entry-company">
+            <span class="entry-company-name">{e.company}</span>
+            {e.location && <span class="entry-divider" aria-hidden="true">·</span>}
+            {e.location && <span class="entry-location mono">{e.location}</span>}
+          </p>
+          {e.description && <p class="entry-desc">{e.description}</p>}
+        </article>
+      ))}
+
+    </div>
 
   </div>
 </section>
@@ -123,7 +162,7 @@ const entries: Entry[] = [
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--space-8);
     align-items: end;
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-3);
   }
 
   .exp-header .section-index {
@@ -154,172 +193,169 @@ const entries: Entry[] = [
     padding-bottom: 6px;
   }
 
-  /* ─── Timeline ────────────────────────────────────────────── */
-  .timeline {
-    list-style: none;
-    padding-left: 0;
-    margin-left: clamp(0px, 8vw, 90px);
-    margin-right: clamp(0px, 4vw, 40px);
-  }
-
-  .tl-entry {
+  /* ─── Two-track grid with shared rows ─────────────────────── */
+  /* Headers in row 1, entries in rows 2..N+1. Each row sizes to
+     its tallest cell, so work[i] and study[i] always share a
+     baseline. No subgrid needed — explicit grid-row placement
+     does the job and is well-supported. */
+  .exp-tracks {
     display: grid;
-    grid-template-columns: 180px 32px minmax(0, 1fr);
-    gap: var(--space-5);
-    padding-block: var(--space-5) var(--space-8);
-    position: relative;
-    align-items: start;
-    transition:
-      background-color 240ms ease,
-      opacity 750ms cubic-bezier(0.16, 1, 0.3, 1),
-      transform 750ms cubic-bezier(0.16, 1, 0.3, 1);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: var(--space-8);
+    row-gap: 0;
+    margin-top: var(--space-3);
   }
 
-  .tl-entry:last-child { padding-bottom: 0; }
+  /* Place each cell explicitly via data-attrs */
+  .exp-tracks > [data-col="1"] { grid-column: 1; }
+  .exp-tracks > [data-col="2"] { grid-column: 2; }
+  .exp-tracks > .track-head    { grid-row: 1; }
+  .exp-tracks > .entry[data-row="2"] { grid-row: 2; }
+  .exp-tracks > .entry[data-row="3"] { grid-row: 3; }
+  .exp-tracks > .entry[data-row="4"] { grid-row: 4; }
+  .exp-tracks > .entry[data-row="5"] { grid-row: 5; }
+  .exp-tracks > .entry[data-row="6"] { grid-row: 6; }
 
-  /* Hover state — subtle warm-up on the entire row */
-  .tl-entry:hover .tl-role {
+  /* ─── Track header ────────────────────────────────────────── */
+  .track-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 14px;
+    margin-bottom: var(--space-3);
+    border-bottom: 1px solid var(--rule);
+    min-width: 0;
+  }
+
+  .track-glyph {
     color: var(--primary-soft);
-  }
-  .tl-entry:hover .tl-node {
-    transform: scale(1.15);
-    border-color: var(--primary-soft);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
   }
 
-  /* ─── Rail (vertical line + node) ─────────────────────────── */
-  .tl-rail {
-    grid-column: 2 / 3;
+  .track-glyph-study {
+    color: var(--text-muted);
+  }
+
+  .track-count {
+    margin-left: auto;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+
+  /* Pulse dot in column header — slightly smaller (6px) */
+  .track-pulse {
     position: relative;
-    justify-self: center;
-    width: 1px;
-    align-self: stretch;
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      var(--rule) 10%,
-      var(--rule) 90%,
-      transparent 100%
-    );
-    min-height: 100%;
-  }
-
-  /* Hide the bottom of the last rail so the line doesn't dangle */
-  .tl-entry:last-child .tl-rail {
-    background: linear-gradient(
-      to bottom,
-      var(--rule) 0%,
-      var(--rule) 40%,
-      transparent 100%
-    );
-  }
-  .tl-entry:first-child .tl-rail {
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      var(--rule) 20%,
-      var(--rule) 90%,
-      transparent 100%
-    );
-  }
-
-  .tl-node {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 12px;
-    height: 12px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background: var(--bg);
-    border: 1.5px solid var(--text-muted);
-    box-shadow: 0 0 0 4px var(--bg);
-    transition: transform 240ms ease, border-color 240ms ease, background 240ms ease;
-    z-index: 2;
-  }
-
-  /* Current entry — amber filled node with soft pulse */
-  .tl-entry[data-current='true'] .tl-node {
     background: var(--amber);
-    border-color: var(--amber);
-    box-shadow:
-      0 0 0 4px var(--bg),
-      0 0 16px rgba(245, 158, 11, 0.45);
+    flex-shrink: 0;
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.55);
   }
 
-  .tl-node-pulse {
+  .track-pulse::after {
+    content: "";
     position: absolute;
-    inset: -6px;
+    inset: -5px;
     border-radius: 50%;
     border: 1px solid var(--amber);
     opacity: 0;
-    animation: tl-pulse 2.4s ease-out infinite;
+    animation: exp-pulse 2.4s ease-out infinite;
   }
 
-  @keyframes tl-pulse {
-    0%   { transform: scale(0.7); opacity: 0.55; }
-    80%  { transform: scale(1.6); opacity: 0; }
-    100% { transform: scale(1.6); opacity: 0; }
-  }
-
-  /* ─── Meta column ─────────────────────────────────────────── */
-  .tl-meta {
-    grid-column: 1 / 2;
+  /* ─── Entry ──────────────────────────────────────────────── */
+  .entry {
+    padding-block: var(--space-3) var(--space-5);
+    border-top: 1px solid var(--rule);
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding-top: 6px;
+    min-width: 0;
+    transition: padding-left 280ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .tl-period {
-    color: var(--text);
+  /* First entry in EACH column (row 2) drops its top border so the
+     header's bottom rule is the only line. */
+  .entry[data-row="2"] {
+    border-top: none;
+    padding-top: 4px;
+  }
+
+  .entry:hover .entry-role {
+    color: var(--primary-soft);
+  }
+
+  /* ─── Meta row (period + Current pill) ────────────────────── */
+  .entry-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 4px;
+  }
+
+  .entry-period {
+    color: var(--text-muted);
     font-size: var(--text-mono-s);
     letter-spacing: 0.08em;
     font-variant-numeric: tabular-nums;
   }
 
-  .tl-kind {
-    display: inline-block;
-    color: var(--text-muted);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+  .entry-current {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  .tl-kind-work   { color: var(--primary-soft); }
-  .tl-kind-study  { color: var(--text-muted); }
+  /* Pulse dot to the LEFT of "Current" — slightly larger (8px) */
+  .entry-pulse {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.55);
+  }
 
-  .tl-chip {
-    display: inline-block;
-    align-self: flex-start;
-    padding: 3px 8px;
-    border: 1px solid rgba(245, 158, 11, 0.35);
-    border-radius: 999px;
+  .entry-pulse::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid var(--amber);
+    opacity: 0;
+    animation: exp-pulse 2.4s ease-out infinite;
+  }
+
+  .entry-current-label {
     color: var(--amber);
     font-size: 10px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    background: rgba(245, 158, 11, 0.06);
+  }
+
+  @keyframes exp-pulse {
+    0%   { transform: scale(0.6); opacity: 0.55; }
+    80%  { transform: scale(1.7); opacity: 0;    }
+    100% { transform: scale(1.7); opacity: 0;    }
   }
 
   /* ─── Body ────────────────────────────────────────────────── */
-  .tl-body {
-    grid-column: 3 / 4;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .tl-role {
+  .entry-role {
     font-family: var(--font-display);
-    font-size: clamp(26px, 2.6vw, 34px);
+    font-size: clamp(22px, 1.9vw, 26px);
     font-weight: 400;
     letter-spacing: -0.02em;
     color: var(--text);
-    line-height: 1.1;
+    line-height: 1.15;
     transition: color 200ms ease;
   }
 
-  .tl-company {
+  .entry-company {
     font-size: var(--text-body-m);
     color: var(--text);
     display: inline-flex;
@@ -328,27 +364,82 @@ const entries: Entry[] = [
     flex-wrap: wrap;
   }
 
-  .tl-company-name {
+  .entry-company-name {
     color: var(--text);
     font-weight: 500;
   }
 
-  .tl-divider {
+  .entry-divider {
     color: var(--rule);
   }
 
-  .tl-location {
+  .entry-location {
     color: var(--text-muted);
     letter-spacing: 0.08em;
     font-size: var(--text-mono-s);
   }
 
-  .tl-desc {
+  .entry-desc {
     color: var(--text-muted);
     font-size: var(--text-body-m);
     line-height: 1.6;
     max-width: 56ch;
     margin-top: 2px;
+  }
+
+  /* ─── Stacked layout (≤900px — narrow desktop + tablet + mobile) ──
+     Switch to a single-column flow. Reorder by column then row using
+     CSS `order`: all Work cells first (header + entries), then all
+     Study cells. The Study header sits directly above its entries
+     with extra breathing room and a short top accent rule so the
+     boundary reads as deliberate. */
+  @media (max-width: 900px) {
+    .exp-tracks {
+      grid-template-columns: 1fr;
+      column-gap: 0;
+    }
+
+    /* Disable the desktop row-pinning — match the explicit-row
+       selectors' specificity (0,2,1) so these resets actually win. */
+    .exp-tracks > .track-head[data-col],
+    .exp-tracks > .entry[data-row] {
+      grid-column: 1;
+      grid-row: auto;
+    }
+
+    /* Order: Work header → Work entries → Study header → Study entries */
+    .exp-tracks > [data-col="1"].track-head           { order: 0; }
+    .exp-tracks > [data-col="1"].entry[data-row="2"]  { order: 1; }
+    .exp-tracks > [data-col="1"].entry[data-row="3"]  { order: 2; }
+    .exp-tracks > [data-col="1"].entry[data-row="4"]  { order: 3; }
+    .exp-tracks > [data-col="1"].entry[data-row="5"]  { order: 4; }
+    .exp-tracks > [data-col="1"].entry[data-row="6"]  { order: 5; }
+
+    .exp-tracks > [data-col="2"].track-head {
+      order: 10;
+      position: relative;
+      margin-top: var(--space-8);
+      padding-top: var(--space-5);
+    }
+    .exp-tracks > [data-col="2"].track-head::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 56px;
+      height: 1px;
+      background: linear-gradient(
+        to right,
+        var(--rule) 0%,
+        var(--rule) 60%,
+        transparent 100%
+      );
+    }
+    .exp-tracks > [data-col="2"].entry[data-row="2"]  { order: 11; }
+    .exp-tracks > [data-col="2"].entry[data-row="3"]  { order: 12; }
+    .exp-tracks > [data-col="2"].entry[data-row="4"]  { order: 13; }
+    .exp-tracks > [data-col="2"].entry[data-row="5"]  { order: 14; }
+    .exp-tracks > [data-col="2"].entry[data-row="6"]  { order: 15; }
   }
 
   /* ─── Mobile ──────────────────────────────────────────────── */
@@ -366,35 +457,8 @@ const entries: Entry[] = [
     .exp-heading { grid-column: 1 / -1; font-size: 40px; }
     .exp-lede    { grid-column: 1 / -1; justify-self: start; }
 
-    .timeline {
-      margin-inline: 0;
-    }
-
-    .tl-entry {
-      grid-template-columns: 24px minmax(0, 1fr);
-      gap: var(--space-3);
-      padding-block: var(--space-3) var(--space-5);
-    }
-
-    .tl-rail {
-      grid-column: 1 / 2;
-      grid-row: 1 / span 2;
-    }
-
-    .tl-meta {
-      grid-column: 2 / 3;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 10px;
-      padding-top: 4px;
-    }
-
-    .tl-body {
-      grid-column: 2 / 3;
-    }
-
-    .tl-role {
-      font-size: 24px;
+    .entry-role {
+      font-size: 22px;
     }
   }
 </style>
