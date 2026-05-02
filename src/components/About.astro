@@ -1,51 +1,16 @@
 ---
-// About — Section 04
-// Beyond the Code — Section 05
-// Two sections in one component:
-//   - About: prose-only, two-column body grid on desktop
-//   - Beyond the Code: full-bleed background video stage (treatment 3A) on
-//     desktop, letterbox card on mobile. Video gated by IntersectionObserver
-//     and respects prefers-reduced-motion.
+// Beyond the Code — Section 04
+// Full-bleed background video stage (treatment 3A) on desktop,
+// letterbox card on mobile. Video gated by IntersectionObserver
+// and respects prefers-reduced-motion.
 // Video assets live in public/: btc-sim.{webm,mp4}, btc-sim-mobile.mp4,
 // btc-sim-poster.jpg. See docs/superpowers/specs/2026-05-01-beyond-fullbleed-and-copy-design.md.
 ---
 
-<!-- ── 04 · ABOUT ──────────────────────────────────────────────────── -->
-<section class="about" id="about">
-  <div class="container about-wrap">
-
-    <header class="about-header">
-      <p class="section-index mono" data-reveal>04 · About</p>
-      <h2 class="about-heading" data-reveal data-reveal-delay="1">
-        Building toward<br />
-        <span class="about-accent">data</span> and
-        <span class="about-accent">AI</span>.
-      </h2>
-    </header>
-
-    <div class="about-body">
-      <p class="about-para" data-reveal data-reveal-delay="2">
-        I'm studying IT Engineering at JAMK in Jyväskylä, specialising in AI and
-        data analytics. Alongside studies, I'm an IT Trainee at Harvia — Intune,
-        device management, and help desk on the day-to-day, plus a hand in
-        larger IT projects across the company.
-      </p>
-      <p class="about-para" data-reveal data-reveal-delay="3">
-        Academically the focus is data — large-scale ML pipelines, multi-model
-        comparisons with Bayesian tuning, evaluation that breaks results down
-        by segment rather than stopping at a headline number. The direction
-        I'm pointing at is a junior data or AI role — somewhere outputs have
-        to be right, not just plausible.
-      </p>
-    </div>
-
-  </div>
-</section>
-
-<!-- Divider: about → beyond the code -->
+<!-- Divider: projects → beyond the code -->
 <div class="container section-divider" data-rule-reveal aria-hidden="true"></div>
 
-<!-- ── 05 · BEYOND THE CODE — full-bleed frame + 16:9 video stage ── -->
+<!-- ── 04 · BEYOND THE CODE — full-bleed frame + 16:9 video stage ── -->
 <section class="beyond" id="beyond">
   <div class="beyond-stage">
     <video
@@ -63,19 +28,27 @@
       <source src="/btc-sim.mp4" type="video/mp4" />
     </video>
     <div class="beyond-scrim" aria-hidden="true"></div>
+
+    <!-- Stage banner: event label (top-right) -->
+    <div class="beyond-banner" aria-hidden="true">
+      <span class="beyond-banner-dot"></span>
+      <span class="mono">ESPORTS WRC KNOCKOUT TROPHY '23</span>
+    </div>
+
+    <!-- Chapter mark (top-left) -->
+    <div class="beyond-chapter">
+      <p class="mono">04 / 05 · Beyond the Code</p>
+    </div>
+
     <div class="beyond-inner">
       <div class="container">
-        <p class="section-index mono" data-reveal>05 · Beyond the Code</p>
-        <h2 class="beyond-heading" data-reveal data-reveal-delay="1">
+        <h2 class="beyond-heading" data-reveal>
           A competitive mindset,<br />
           <span class="beyond-accent">applied beyond code</span>.
         </h2>
-        <p class="beyond-para" data-reveal data-reveal-delay="2">
+        <p class="beyond-para" data-reveal data-reveal-delay="1">
           Two-time DiRT Rally world champion with a competitive sim racing background.
-        </p>
-        <p class="beyond-para" data-reveal data-reveal-delay="3">
-          These days, I keep busy with gym training, outdoor activities, open water
-          swimming, and Latin dance.
+          These days, gym training, outdoor activities, open water swimming, and Latin dance.
         </p>
       </div>
     </div>
@@ -83,57 +56,7 @@
 </section>
 
 <style>
-  /* ─── 04 · About layout ──────────────────────────────────── */
-  .about {
-    padding-block: var(--space-13) var(--space-13);
-  }
-
-  .about-wrap {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-8);
-  }
-
-  .about-header {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: var(--space-8);
-    align-items: end;
-    margin-bottom: var(--space-3);
-  }
-
-  .about-header .section-index {
-    grid-column: 1 / -1;
-    margin-bottom: var(--space-3);
-  }
-
-  .about-heading {
-    grid-column: 1 / 2;
-    font-size: var(--text-display-l);
-    color: var(--text);
-    line-height: 1.02;
-  }
-
-  .about-accent {
-    color: var(--primary-soft);
-    font-style: italic;
-    font-weight: 300;
-  }
-
-  /* 2-column prose grid — gives a natural measure on wide screens */
-  .about-body {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-6);
-  }
-
-  .about-para {
-    color: var(--text-muted);
-    font-size: var(--text-body-l);
-    line-height: 1.65;
-  }
-
-  /* ─── 05 · Beyond the Code — outer frame + 16:9 stage ────── */
+  /* ─── 04 · Beyond the Code — outer frame + 16:9 stage ────── */
   /* Outer frame is full-bleed (100vw); stage caps width so the video
      always renders at 16:9 with no crop, regardless of viewport.
      On screens wider than calc(85vh * 16/9), the page bg shows on
@@ -189,7 +112,8 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding-block-end: var(--space-10);
+    /* 58px — close to the stage edge but with enough room to breathe */
+    padding-block-end: 58px;
   }
 
   .beyond-inner > .container {
@@ -200,6 +124,13 @@
 
   .beyond-inner .section-index {
     margin: 0;
+  }
+
+  /* The chapter mark overlay already labels the section —
+     suppress the ::before rule-line on the inner copy so it
+     doesn't double up with the global .section-index style. */
+  .beyond-inner .section-index::before {
+    display: none;
   }
 
   .beyond-heading {
@@ -220,6 +151,51 @@
     font-size: var(--text-body-l);
     line-height: 1.65;
     max-width: 56ch;
+    margin: 0;
+  }
+
+  /* ─── Stage banner (top-right) ──────────────────────────── */
+  .beyond-banner {
+    position: absolute;
+    top: 32px;
+    right: 40px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 14px;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    background: rgba(245, 158, 11, 0.06);
+    border-radius: 4px;
+    backdrop-filter: blur(8px);
+    color: var(--amber);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .beyond-banner-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.7);
+    flex-shrink: 0;
+  }
+
+  /* ─── Chapter mark (top-left) ────────────────────────────── */
+  .beyond-chapter {
+    position: absolute;
+    top: 32px;
+    left: 40px;
+    z-index: 3;
+    color: rgba(232, 237, 245, 0.7);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+
+  .beyond-chapter p {
     margin: 0;
   }
 
@@ -244,6 +220,12 @@
 
   /* ─── Mobile ─────────────────────────────────────────────── */
   @media (max-width: 768px) {
+    /* Stage banner and chapter mark are redundant at mobile width */
+    .beyond-banner,
+    .beyond-chapter {
+      display: none;
+    }
+
     .about {
       padding-block: var(--space-8) var(--space-8);
     }

@@ -244,3 +244,25 @@ These are not design questions — they are details to settle when producing the
 3. Should the IO that gates video playback be a separate small script, or merged into the existing reveal IO loader?
 
 These are tractable from the codebase and don't require further user input.
+
+---
+
+## 9. Implementation deviations (2026-05-01, post-build addendum)
+
+Two intentional deviations from the spec above, captured here for traceability:
+
+**Deviation 1 — WebM dropped, MP4-only.** The spec lists four encoded outputs (`btc-sim.webm`, `btc-sim.mp4`, `btc-sim-mobile.webm`, `btc-sim-poster.jpg`). Final ship is MP4-only: `btc-sim.mp4` (1080p60 H.264 high crf 20), `btc-sim-mobile.mp4` (720p60 H.264 high crf 23), `btc-sim-poster.jpg`. WebM was dropped for two reasons:
+
+- Sandbox CPU couldn't encode VP9 1080p60 within the bash tool's 45-second timeout, even at `-cpu-used 8 -crf 32`. The desktop WebM that did write completed prematurely at 504 of 962 frames — truncated.
+- H.264 MP4 has universal browser support in 2026 (Chrome, Firefox, Safari, Edge, iOS, Android). The marginal byte-saving of VP9 doesn't justify the dual-codec markup or the encoding fragility.
+
+The `<video>` markup carries two sources only — mobile MP4 (`media="(max-width: 768px)"`) then desktop MP4. Future video swaps should follow the same pattern.
+
+**Deviation 2 — Stage wrapper added for wide-screen aspect.** The spec's section 1.2 specified `height: min(80vh, 720px)` with the video filling the section via `object-fit: cover`. Joona flagged after first-pass implementation that this cropped the top/bottom of the 16:9 clip noticeably on full-width MacBook and severely on ultrawide. The fix:
+
+- Added a `.beyond-stage` wrapper div between `<section class="beyond">` and the video/scrim/inner triplet.
+- `.beyond` is now a flex-center outer frame (full-bleed via `margin-inline: calc(50% - 50vw)`).
+- `.beyond-stage` carries the actual visible-area sizing: `width: min(100vw, calc(85vh * 16 / 9)); aspect-ratio: 16 / 9`. This guarantees the stage is always exactly 16:9 with width at most `85vh × 16/9`. On screens wider than the cap, page bg shows on the sides of the stage.
+- The `aria-hidden="true"` ARIA contract from spec §1.7 is preserved on the video and scrim.
+
+The mobile branch unwinds the stage (aspect-ratio: auto, position static) and the video becomes a contained letterbox card — same end behaviour as section 1.4.

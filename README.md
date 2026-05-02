@@ -22,8 +22,9 @@ The reference aesthetic is Revolut / Vercel / Linear: deep navy, editorial serif
 | 4 | Experience & Stack sections | Complete |
 | 5 | Project cards | Complete |
 | 5b | Divider redesign (oval amber aura + edge-faded line + shimmer) and IO flicker debounce | Complete |
-| 6 | About & Beyond the Code | Pending |
-| 7 | Contact | Pending |
+| 6 | About & Beyond the Code (initial: 50/50 grid + portrait clip) | Complete |
+| 6b | Beyond redesign — full-bleed 16:9 video stage, copy refresh, EAWrc clip swap | Complete (2026-05-01) |
+| 7 | Contact | Complete |
 | 8 | Polish & accessibility | Pending |
 | 9 | Cloudflare Pages deploy | Pending |
 | 10 | Final content & domain switch | Pending |
@@ -54,6 +55,8 @@ docs/superpowers/               # locked specs and execution plans
 - Dark only; no light-mode toggle in v1
 - Motion uses spring easing `cubic-bezier(0.16, 1, 0.3, 1)` with 28px lift at 750ms
 - Section dividers replay on every scroll pass (both directions)
-- Reduced-motion users get revealed content with no transitions
+- Reduced-motion users get revealed content with no transitions; ambient background videos pause and show their poster frame
+- Beyond the Code video plays only while the section is in the viewport (IO-gated); muted, looped, no controls — pure ambient element
+- Beyond stage caps width at `min(100vw, 85vh × 16/9)` so the 16:9 sim racing clip is always shown in full at every viewport size, with the page background showing on the sides on screens wider than the cap (Linear / Vercel hero pattern)
 
 Links: [GitHub](https://github.com/joonapankkone/pankkonen-dev)

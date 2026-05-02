@@ -13,27 +13,25 @@ import Contact from '../components/Contact.astro';
     <!-- Left column -->
     <div class="hero-left">
 
-      <p class="hero-eyebrow mono" id="hero-eyebrow">
-        pankkonen.dev
-      </p>
+      <div class="hero-eyebrow-row" id="hero-eyebrow-row">
+        <p class="hero-eyebrow mono">pankkonen.dev</p>
+        <span class="eyebrow-divider" aria-hidden="true"></span>
+        <div class="hero-status">
+          <span class="status-dot"></span>
+          <span class="mono status-text">Open to opportunities</span>
+        </div>
+      </div>
 
       <h1 class="hero-name" id="hero-name">
         Joona<br />Pankkonen
       </h1>
 
       <p class="hero-tagline" id="hero-tagline">
-        Data. Code. Systems. — and a 2× world title on the side.
+        Data. Code. Systems.<br />
+        <span class="hero-italic">And a 2× world title on the side.</span>
       </p>
 
-      <div class="hero-status" id="hero-status">
-        <span class="status-dot"></span>
-        <span class="mono status-text">Open to opportunities</span>
-      </div>
-
-      <div class="hero-buttons" id="hero-buttons">
-        <a href="#projects" class="btn btn-primary">View Projects</a>
-        <a href="#contact" class="btn btn-ghost">Contact</a>
-      </div>
+      <a href="#contact" class="btn btn-ghost" id="hero-cta">Contact ↓</a>
 
     </div>
 
@@ -75,16 +73,13 @@ import Contact from '../components/Contact.astro';
   <!-- 03 · PROJECTS -->
   <Projects />
 
-  <!-- Divider: projects → about -->
-  <div class="container section-divider" data-rule-reveal aria-hidden="true"></div>
-
-  <!-- 04 · ABOUT + 05 · BEYOND THE CODE -->
+  <!-- 04 · BEYOND THE CODE -->
   <About />
 
   <!-- Divider: beyond the code → contact -->
   <div class="container section-divider" data-rule-reveal aria-hidden="true"></div>
 
-  <!-- 06 · CONTACT -->
+  <!-- 05 · CONTACT -->
   <Contact />
 
 </Layout>
@@ -108,13 +103,28 @@ import Contact from '../components/Contact.astro';
     gap: 0;
   }
 
+  /* ─── Eyebrow row (eyebrow + divider + status) ─────────────── */
+  .hero-eyebrow-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 56px;
+    opacity: 0;
+  }
+
   .hero-eyebrow {
     color: var(--text-muted);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     font-size: var(--text-mono-s);
-    margin-bottom: var(--space-3);
-    opacity: 0;
+    margin: 0;
+  }
+
+  .eyebrow-divider {
+    width: 1px;
+    height: 12px;
+    background: var(--rule);
+    flex-shrink: 0;
   }
 
   .hero-name {
@@ -125,13 +135,20 @@ import Contact from '../components/Contact.astro';
   }
 
   .hero-tagline {
-    font-size: var(--text-body-l);
-    color: var(--text-muted);
-    line-height: 1.5;
-    max-width: 440px;
-    margin-bottom: var(--space-5);
+    font-family: var(--font-display);
     font-weight: 300;
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.35;
+    max-width: 20ch;
+    margin-bottom: 48px;
+    color: var(--text);
     opacity: 0;
+  }
+
+  .hero-italic {
+    color: var(--primary-soft);
+    font-style: italic;
+    font-weight: 300;
   }
 
   /* ─── Status dot ────────────────────────────────────────────── */
@@ -139,8 +156,6 @@ import Contact from '../components/Contact.astro';
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: var(--space-5);
-    opacity: 0;
   }
 
   .status-dot {
@@ -164,15 +179,12 @@ import Contact from '../components/Contact.astro';
     text-transform: uppercase;
   }
 
-  /* ─── Buttons ───────────────────────────────────────────────── */
-  /* All `.btn`, `.btn-primary`, `.btn-ghost` rules live in           */
-  /* src/styles/global.css so the hero CTAs share the same hover     */
-  /* polish as the project-panel CTAs. Local scope kept minimal.     */
-  .hero-buttons {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+  /* ─── Single CTA ───────────────────────────────────────────── */
+  /* `.btn` / `.btn-ghost` rules live in global.css; just init     */
+  /* opacity for the GSAP entrance.                                */
+  #hero-cta {
     opacity: 0;
+    align-self: flex-start; /* prevent flex-column stretch to full width */
   }
 
   /* ─── Right column: photo ───────────────────────────────────── */
@@ -266,19 +278,18 @@ import Contact from '../components/Contact.astro';
   import { gsap } from 'gsap';
 
   // ─── Hero load stagger ─────────────────────────────────────
-  gsap.set(['#hero-eyebrow', '#hero-name', '#hero-tagline', '#hero-status', '#hero-buttons', '#hero-image'], {
+  gsap.set(['#hero-eyebrow-row', '#hero-name', '#hero-tagline', '#hero-cta', '#hero-image'], {
     y: 24,
   });
 
   const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
   tl
-    .to('#hero-eyebrow', { opacity: 1, y: 0, duration: 0.6 }, 0.1)
-    .to('#hero-name',    { opacity: 1, y: 0, duration: 0.7 }, 0.25)
-    .to('#hero-tagline', { opacity: 1, y: 0, duration: 0.6 }, 0.45)
-    .to('#hero-status',  { opacity: 1, y: 0, duration: 0.5 }, 0.6)
-    .to('#hero-buttons', { opacity: 1, y: 0, duration: 0.5 }, 0.7)
-    .to('#hero-image',   { opacity: 1, y: 0, duration: 0.7 }, 0.35);
+    .to('#hero-eyebrow-row', { opacity: 1, y: 0, duration: 0.6 }, 0.1)
+    .to('#hero-name',        { opacity: 1, y: 0, duration: 0.7 }, 0.25)
+    .to('#hero-tagline',     { opacity: 1, y: 0, duration: 0.6 }, 0.45)
+    .to('#hero-cta',         { opacity: 1, y: 0, duration: 0.5 }, 0.6)
+    .to('#hero-image',       { opacity: 1, y: 0, duration: 0.7 }, 0.35);
 
   // ─── Scroll reveal ─────────────────────────────────────────
   // Spring easing + 28px lift — all [data-reveal] elements.

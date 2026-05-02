@@ -1,65 +1,52 @@
 ---
-// Contact — Section 06
+// Contact — Section 05
 // Clean closing section: email, GitHub, LinkedIn.
 ---
 
 <section class="contact" id="contact">
   <div class="container contact-wrap">
 
-    <header class="contact-header">
-      <p class="section-index mono" data-reveal>06 · Contact</p>
+    <header>
+      <p class="section-index mono" data-reveal>05 · Contact</p>
       <h2 class="contact-heading" data-reveal data-reveal-delay="1">
-        Let's talk<br />
-        <span class="contact-accent">data</span>.
+        The fastest path is<br /><em>email</em>.
       </h2>
-      <p class="contact-lede" data-reveal data-reveal-delay="2">
-        Open to junior data and AI roles, collaborations, or just a good
-        conversation about ML pipelines and sim racing.
-      </p>
     </header>
 
-    <div class="contact-links" data-reveal data-reveal-delay="3">
+    <div class="contact-grid" data-reveal data-reveal-delay="2">
 
-      <a href="mailto:joonapankkone@gmail.com" class="contact-item">
-        <span class="ci-icon mono" aria-hidden="true">✉</span>
-        <span class="ci-body">
-          <span class="ci-label mono">Email</span>
-          <span class="ci-value">joonapankkone@gmail.com</span>
-        </span>
-        <span class="ci-arrow" aria-hidden="true">↗</span>
+      <!-- Primary: giant email display -->
+      <a href="mailto:joonapankkone@gmail.com" class="contact-email">
+        <p class="ce-eyebrow mono">REACH OUT</p>
+        <p class="ce-addr">joonapankkone<wbr />@gmail.com</p>
       </a>
 
-      <a
-        href="https://github.com/joonapankkone"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="contact-item"
-      >
-        <span class="ci-icon mono" aria-hidden="true">⌥</span>
-        <span class="ci-body">
-          <span class="ci-label mono">GitHub</span>
-          <span class="ci-value">github.com/joonapankkone</span>
-        </span>
-        <span class="ci-arrow" aria-hidden="true">↗</span>
-      </a>
-
-      <a
-        href="https://linkedin.com/in/joona-pankkonen-b67463351"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="contact-item"
-      >
-        <span class="ci-icon mono" aria-hidden="true">◈</span>
-        <span class="ci-body">
-          <span class="ci-label mono">LinkedIn</span>
-          <span class="ci-value">linkedin.com/in/joona-pankkonen-b67463351</span>
-        </span>
-        <span class="ci-arrow" aria-hidden="true">↗</span>
-      </a>
+      <!-- Sidebar: GitHub + LinkedIn -->
+      <aside class="contact-side">
+        <p class="cs-eyebrow mono">ELSEWHERE</p>
+        <a
+          href="https://github.com/joonapankkone"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="cs-row"
+        >
+          <span>GitHub</span>
+          <span class="mono">joonapankkone ↗</span>
+        </a>
+        <a
+          href="https://linkedin.com/in/joona-pankkonen-b67463351"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="cs-row"
+        >
+          <span>LinkedIn</span>
+          <span class="mono">joona-pankkonen ↗</span>
+        </a>
+      </aside>
 
     </div>
 
-    <footer class="contact-footer" data-reveal data-reveal-delay="4">
+    <footer class="contact-footer" data-reveal data-reveal-delay="3">
       <p class="footer-copy mono">
         Built with Astro · Deployed on Cloudflare Pages ·
         <span class="footer-amber">pankkonen.dev</span>
@@ -72,133 +59,131 @@
 <style>
   /* ─── Layout ──────────────────────────────────────────────── */
   .contact {
-    padding-block: var(--space-13) var(--space-13);
+    /* Generous section height — editorial feel, like a magazine back page */
+    padding-block: 120px 140px;
   }
 
   .contact-wrap {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-10);
+    /* Individual row spacing via margin-top on children */
+    gap: 0;
   }
 
   /* ─── Header ──────────────────────────────────────────────── */
-  .contact-header {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: var(--space-8);
-    align-items: end;
-  }
-
-  .contact-header .section-index {
-    grid-column: 1 / -1;
-    margin-bottom: var(--space-3);
-  }
-
   .contact-heading {
-    grid-column: 1 / 2;
     font-size: var(--text-display-l);
     color: var(--text);
-    line-height: 1.02;
+    line-height: 1.1;
+    margin-top: var(--space-3);
   }
 
-  .contact-accent {
+  .contact-heading em {
     color: var(--primary-soft);
     font-style: italic;
     font-weight: 300;
   }
 
-  .contact-lede {
-    grid-column: 2 / 3;
-    color: var(--text-muted);
-    font-size: var(--text-body-l);
-    line-height: 1.6;
-    max-width: 44ch;
-    justify-self: end;
-    padding-bottom: 6px;
-  }
-
-  /* ─── Link cards ──────────────────────────────────────────── */
-  .contact-links {
+  /* ─── Asymmetric grid ─────────────────────────────────────── */
+  .contact-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-4);
+    grid-template-columns: 1.6fr 1fr;
+    gap: 64px;
+    align-items: start;
+    /* Space above — lands the "Reach out" border at editorial distance from heading */
+    margin-top: 72px;
   }
 
-  .contact-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    padding: var(--space-5) var(--space-6);
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: 12px;
+  /* ─── Primary: giant email display ───────────────────────── */
+  .contact-email {
+    display: block;
+    padding: 32px 0;
+    border-block: 1px solid var(--rule);
     text-decoration: none;
     color: inherit;
-    transition:
-      background 200ms ease,
-      border-color 200ms ease,
-      transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    overflow: hidden;
   }
 
-  .contact-item:hover {
-    background: var(--surface-raised);
-    border-color: var(--primary-soft);
-    transform: translateY(-2px);
-  }
-
-  .contact-item:focus-visible {
+  .contact-email:focus-visible {
     outline: 2px solid var(--primary-soft);
     outline-offset: 3px;
   }
 
-  .ci-icon {
-    font-size: 20px;
+  .ce-eyebrow {
     color: var(--amber);
-    flex-shrink: 0;
-    line-height: 1;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
   }
 
-  .ci-body {
+  .ce-addr {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3.4vw, 48px);
+    color: var(--text);
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    word-break: break-all;
+    transition: color 220ms ease;
+    margin: 0;
+  }
+
+  .contact-email:hover .ce-addr {
+    color: var(--primary-soft);
+  }
+
+  /* ─── Sidebar: GitHub + LinkedIn ─────────────────────────── */
+  .contact-side {
+    /* Centre the sidebar block vertically within the email column's height
+       so "ELSEWHERE" + rows sit cleanly inside the ruled email area */
+    align-self: center;
+    padding-top: 0;
+  }
+
+  .cs-eyebrow {
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .cs-row {
     display: flex;
-    flex-direction: column;
-    gap: 3px;
-    flex: 1;
-    min-width: 0;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-top: 1px solid var(--rule);
+    color: var(--text);
+    text-decoration: none;
+    transition: color 200ms ease;
+    font-size: var(--text-body-m);
   }
 
-  .ci-label {
+  .cs-row:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .cs-row:hover {
+    color: var(--primary-soft);
+  }
+
+  .cs-row .mono {
     font-size: var(--text-mono-s);
     color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    transition: color 200ms ease;
   }
 
-  .ci-value {
-    font-size: var(--text-body-m);
-    color: var(--text);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .ci-arrow {
-    color: var(--text-muted);
-    font-size: 18px;
-    flex-shrink: 0;
-    transition: color 200ms ease, transform 200ms ease;
-  }
-
-  .contact-item:hover .ci-arrow {
+  .cs-row:hover .mono {
     color: var(--primary-soft);
-    transform: translate(2px, -2px);
   }
 
   /* ─── Footer ──────────────────────────────────────────────── */
   .contact-footer {
     border-top: 1px solid var(--rule);
-    padding-top: var(--space-6);
+    /* 32px below the border text — comfortable, not cramped */
+    padding-top: 32px;
+    /* Large whitespace above footer rule — lets the section breathe */
+    margin-top: 180px;
   }
 
   .footer-copy {
@@ -234,30 +219,25 @@
   /* ─── Mobile ─────────────────────────────────────────────── */
   @media (max-width: 768px) {
     .contact {
-      padding-block: var(--space-8) var(--space-8);
+      padding-block: 64px 80px;
     }
 
-    .contact-header {
+    .contact-grid {
       grid-template-columns: 1fr;
+      gap: 48px;
+      margin-top: 40px;
     }
 
-    .contact-heading {
-      grid-column: 1 / -1;
+    .contact-side {
+      padding-top: 0;
     }
 
-    .contact-lede {
-      grid-column: 1 / -1;
-      justify-self: start;
-      max-width: 100%;
+    .contact-footer {
+      margin-top: 64px;
     }
 
-    .contact-links {
-      grid-template-columns: 1fr;
-      gap: var(--space-3);
-    }
-
-    .ci-value {
-      font-size: var(--text-body-s);
+    .ce-addr {
+      font-size: clamp(24px, 7vw, 36px);
     }
   }
 </style>
