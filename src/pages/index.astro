@@ -6,6 +6,8 @@ import Projects from '../components/Projects.astro';
 import About from '../components/About.astro';
 import Contact from '../components/Contact.astro';
 import ChapterMarker from '../components/ChapterMarker.astro';
+import StackDivider from '../components/StackDivider.astro';
+import ProjectsDivider from '../components/ProjectsDivider.astro';
 ---
 
 <Layout>
@@ -61,17 +63,17 @@ import ChapterMarker from '../components/ChapterMarker.astro';
   <!-- Divider: hero → experience -->
   <div class="container section-divider" data-rule-reveal aria-hidden="true"></div>
 
-  <!-- 02 · EXPERIENCE -->
+  <!-- 01 · EXPERIENCE -->
   <Experience />
 
-  <!-- Divider: experience → stack -->
-  <div class="container section-divider" data-rule-reveal aria-hidden="true"></div>
+  <!-- Divider: experience → stack (side-rail wayfinder — also replaces the inline 02·Stack eyebrow) -->
+  <StackDivider num="02" label="Stack" />
 
   <!-- 02 · STACK -->
   <Stack />
 
-  <!-- Divider: stack → projects -->
-  <div class="container section-divider" data-rule-reveal aria-hidden="true"></div>
+  <!-- Divider: stack → projects (centered § with twin hairlines glowing outward) -->
+  <ProjectsDivider />
 
   <!-- 03 · PROJECTS -->
   <Projects />

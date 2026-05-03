@@ -57,7 +57,6 @@ const categories: Category[] = [
   <div class="container stack-wrap">
 
     <header class="stack-header">
-      <p class="section-index mono" data-reveal>02 · Stack</p>
       <h2 class="stack-heading" id="stack-heading" data-reveal data-reveal-delay="1">
         Tools I reach for<br />
         <span class="stack-accent">without thinking.</span>
@@ -89,12 +88,6 @@ const categories: Category[] = [
       ))}
     </div>
 
-    <p class="stack-footnote mono" data-reveal data-reveal-delay="4">
-      <span class="stack-footnote-plus">+</span> reading: Rust, Go
-      <span class="stack-footnote-sep" aria-hidden="true">—</span>
-      daily: TypeScript
-    </p>
-
   </div>
 </section>
 
@@ -117,11 +110,6 @@ const categories: Category[] = [
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--space-8);
     align-items: end;
-    margin-bottom: var(--space-3);
-  }
-
-  .stack-header .section-index {
-    grid-column: 1 / -1;
     margin-bottom: var(--space-3);
   }
 
@@ -286,31 +274,6 @@ const categories: Category[] = [
     font-weight: 500;
     color: var(--text);
     letter-spacing: -0.005em;
-  }
-
-  /* ─── Footer note ─────────────────────────────────────────── */
-  .stack-footnote {
-    margin-top: var(--space-5);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--rule);
-    color: var(--text-muted);
-    font-size: 11px;
-    letter-spacing: 0.10em;
-    line-height: 1.6;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .stack-footnote-plus {
-    color: var(--amber);
-    margin-right: 2px;
-  }
-
-  .stack-footnote-sep {
-    color: var(--rule);
-    margin-inline: 4px;
   }
 
   /* ─── Responsive ──────────────────────────────────────────── */

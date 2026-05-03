@@ -2,20 +2,23 @@
 // Sticky chapter marker — Progress timeline + hover-expand label
 //
 // Right-side fixed wayfinding. A single thin vertical line with
-// 5 ticks for sections. An amber fill grows from the top of the
-// line as the user scrolls the page. Default state: only the active
-// section's number is visible (e.g. "03"). Hover any link to expand
-// it into the full label ("03 · Projects" / "04 · Beyond").
+// 6 ticks for sections (Intro through Contact). An amber fill grows
+// from the top of the line as the user scrolls the page. Default
+// state: only the active section's number is visible (e.g. "03").
+// Hover any link to expand it into the full label.
 //
 // Hidden during hero — fades in once the user crosses into Experience.
-// Hidden near the footer (≥90% scroll) so it doesn't fight the
-// contact CTA. Hidden on viewports ≤900px.
+// Stays visible all the way through Contact (the previous near-footer
+// gate was removed — the rail is the way back to the top from anywhere).
+// The "00 · Intro" link lets the reader jump back to the hero from
+// any other section. Hidden on viewports ≤900px.
 //
 // Because the resting state is just a 7px tick, this layout never
 // collides with body copy at any width — no narrow-desktop collapse
 // logic needed.
 
 const sections = [
+  { id: 'hero',       n: '00', label: 'Intro'           },
   { id: 'experience', n: '01', label: 'Experience'      },
   { id: 'stack',      n: '02', label: 'Stack'           },
   { id: 'projects',   n: '03', label: 'Projects'        },
@@ -234,40 +237,24 @@ const sections = [
     fill.style.height = `${pct * 100}%`;
   };
 
-  // ─── Hero / footer gates ───────────────────────────────────
+  // ─── Hero gate ─────────────────────────────────────────────
+  // Visible while past the hero. No near-footer hide anymore — the
+  // rail stays visible through Contact so the reader always has the
+  // "00 · Intro" link available to jump back to the top.
   const nav  = document.querySelector<HTMLElement>('.chapter-nav');
   const hero = document.querySelector<HTMLElement>('#hero');
 
   if (nav && hero) {
-    let pastHero = false;
-    let nearFooter = false;
-
-    const update = () => {
-      if (pastHero && !nearFooter) nav.classList.add('visible');
-      else nav.classList.remove('visible');
-    };
-
     const heroIO = new IntersectionObserver(
       ([entry]) => {
-        pastHero = !entry.isIntersecting;
-        update();
+        nav.classList.toggle('visible', !entry.isIntersecting);
       },
       { threshold: 0.1 }
     );
     heroIO.observe(hero);
-
-    const onScroll = () => {
-      const scrolled = window.scrollY + window.innerHeight;
-      const total    = document.documentElement.scrollHeight;
-      nearFooter = scrolled / total >= 0.9;
-      update();
-      updateFill();
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-  } else {
-    // No hero — at least keep the fill in sync.
-    window.addEventListener('scroll', updateFill, { passive: true });
-    updateFill();
   }
+
+  // Progress fill stays driven by raw scroll percentage.
+  window.addEventListener('scroll', updateFill, { passive: true });
+  updateFill();
 </script>

@@ -1,0 +1,158 @@
+---
+// StackDivider — Side Rail wayfinding between Experience and Stack.
+// Replaces the loud sweep divider, and also serves as the section's
+// visual identifier (the inline "02 · Stack" eyebrow inside Stack.astro
+// is removed when this is in place).
+//
+// Visual: italic display number on the left, mono section label, hairline
+// extends to the right with an amber start that fades into rule grey,
+// terminating tick on the far end. Editorial / magazine register —
+// asymmetric, intentional, quiet.
+//
+// Uses [data-rule-reveal] so the existing IO in index.astro picks it up.
+// Sweep styling in global.css is scoped to `.section-divider`, which
+// this component does NOT carry — it brings its own animation only.
+
+interface Props {
+  num:    string;   // e.g. "02"
+  label:  string;   // e.g. "Stack"
+}
+
+const { num, label } = Astro.props;
+---
+
+<div class="stack-divider" data-rule-reveal aria-hidden="true">
+  <div class="sd-inner">
+    <span class="sd-num">{num}</span>
+    <span class="sd-label mono">{label}</span>
+    <span class="sd-rule"></span>
+    <span class="sd-tick"></span>
+  </div>
+</div>
+
+<style>
+  /* ─── Outer band ───────────────────────────────────────────── */
+  .stack-divider {
+    position: relative;
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    padding-inline: 0;
+    height: 96px;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    overflow: visible;
+    box-sizing: border-box;
+  }
+
+  /* Capped inner row matches the rest of the page's content width. */
+  .sd-inner {
+    width: 100%;
+    max-width: var(--max-width);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  /* ─── Number — display italic ──────────────────────────────── */
+  .sd-num {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: 36px;
+    line-height: 1;
+    letter-spacing: -0.015em;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    /* Fraunces variable axis — display optical size for refined italic. */
+    font-variation-settings: "opsz" 144;
+    flex-shrink: 0;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 520ms cubic-bezier(0.16, 1, 0.3, 1) 80ms,
+      transform 620ms cubic-bezier(0.16, 1, 0.3, 1) 80ms;
+  }
+  .stack-divider.is-visible .sd-num {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── Section label — mono uppercase ───────────────────────── */
+  .sd-label {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+    flex-shrink: 0;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition:
+      opacity 460ms cubic-bezier(0.16, 1, 0.3, 1) 260ms,
+      transform 620ms cubic-bezier(0.16, 1, 0.3, 1) 260ms;
+  }
+  .stack-divider.is-visible .sd-label {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ─── Hairline — amber start fading into rule grey ─────────── */
+  .sd-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      rgba(245, 158, 11, 0.55) 0%,
+      rgba(245, 158, 11, 0.30) 12%,
+      rgba(232, 237, 245, 0.16) 35%,
+      rgba(232, 237, 245, 0.10) 100%
+    );
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 940ms cubic-bezier(0.16, 1, 0.3, 1) 360ms;
+  }
+  .stack-divider.is-visible .sd-rule {
+    transform: scaleX(1);
+  }
+
+  /* ─── Terminating tick on the far right ─────────────────────── */
+  .sd-tick {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(232, 237, 245, 0.32);
+    flex-shrink: 0;
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 380ms cubic-bezier(0.16, 1, 0.3, 1) 1180ms,
+      transform 460ms cubic-bezier(0.16, 1, 0.3, 1) 1180ms;
+  }
+  .stack-divider.is-visible .sd-tick {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ─── Mobile ───────────────────────────────────────────────── */
+  @media (max-width: 600px) {
+    .stack-divider { height: 78px; }
+    .sd-inner { gap: 12px; }
+    .sd-num { font-size: 28px; }
+    .sd-label { font-size: 10px; letter-spacing: 0.20em; }
+    .sd-tick { width: 5px; height: 5px; }
+  }
+
+  /* ─── Reduced motion ───────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .sd-num,
+    .sd-label,
+    .sd-rule,
+    .sd-tick {
+      transition-duration: 1ms !important;
+      transition-delay: 0ms !important;
+    }
+  }
+</style>
