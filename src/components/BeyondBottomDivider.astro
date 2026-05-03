@@ -1,0 +1,121 @@
+---
+// BeyondBottomDivider — Tight Edge Bleed at the bottom of the Beyond the Code video.
+//
+// Concept: ambient light from the video stage "bleeds" downward, like
+// a warm LED glow escaping from behind the monitor bezel. The light is
+// hottest right at the video's bottom edge (top of this element) and
+// tapers quickly to the page background below.
+//
+// Width: min(100vw, calc(85vh * 16 / 9)) — tracks .beyond-stage exactly.
+// Centred within a 100vw outer wrapper (same pattern as .beyond).
+//
+// No IO / scroll animation needed — the element simply exists as an
+// atmospheric presence. A barely-visible breathing pulse keeps it alive.
+// On mobile the .beyond-stage is a normal flow card, so this element
+// is suppressed (the rounded card already has its own visual weight).
+---
+
+<div class="beyond-bottom-bleed" aria-hidden="true">
+  <div class="bbb-inner">
+    <!-- Tight edge glow — concentrated amber at very top -->
+    <div class="bbb-edge"></div>
+    <!-- Wider atmospheric haze below the edge -->
+    <div class="bbb-haze"></div>
+    <!-- Horizontal mask: blends into page at the video's left/right edges -->
+    <div class="bbb-mask"></div>
+  </div>
+</div>
+
+<style>
+  /* ─── Outer wrapper — same pattern as .beyond ───────────── */
+  .beyond-bottom-bleed {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    padding-inline: 0;
+    pointer-events: none;
+    /* Pulls flush against the video's bottom edge */
+    margin-top: 0;
+  }
+
+  /* ─── Inner — matches .beyond-stage width exactly ───────── */
+  .bbb-inner {
+    position: relative;
+    width: min(100vw, calc(85vh * 16 / 9));
+    height: 80px;
+    overflow: hidden;
+  }
+
+  /* ─── Tight edge glow ────────────────────────────────────── */
+  /* Narrow, high-intensity band right at the video's bottom edge. */
+  /* Hot amber at y=0, vanishes within the first ~30% of height.   */
+  .bbb-edge {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(245, 158, 11, 0.22)  0%,
+      rgba(245, 158, 11, 0.12) 12%,
+      rgba(245, 158, 11, 0.04) 30%,
+      rgba(245, 158, 11, 0)    55%
+    );
+    animation: bbb-breathe 4s ease-in-out infinite;
+  }
+
+  /* ─── Wider atmospheric haze ─────────────────────────────── */
+  /* Oval spread that gives the glow a physical, cinematic depth. */
+  .bbb-haze {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 55% 40px at 50% 0%,
+      rgba(245, 158, 11, 0.12)  0%,
+      rgba(245, 158, 11, 0.06) 40%,
+      rgba(245, 158, 11, 0.02) 70%,
+      rgba(245, 158, 11, 0)   100%
+    );
+    animation: bbb-breathe 4s ease-in-out infinite;
+    animation-delay: -0.8s; /* slight phase offset for depth */
+  }
+
+  /* ─── Horizontal edge mask ───────────────────────────────── */
+  /* Fades the glow at the left/right edges so it doesn't cut     */
+  /* sharply against the page background on ultra-wide viewports. */
+  .bbb-mask {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(11, 18, 32, 0.85)  0%,
+      rgba(11, 18, 32, 0)     5%,
+      rgba(11, 18, 32, 0)    95%,
+      rgba(11, 18, 32, 0.85) 100%
+    );
+    pointer-events: none;
+  }
+
+  /* ─── Breathing pulse ────────────────────────────────────── */
+  /* Very subtle opacity oscillation — gives the impression that  */
+  /* the video's changing content shifts the ambient light.       */
+  @keyframes bbb-breathe {
+    0%,  100% { opacity: 1;    }
+    50%       { opacity: 0.70; }
+  }
+
+  /* ─── Mobile — suppress (video is a card, not full-bleed) ── */
+  @media (max-width: 768px) {
+    .beyond-bottom-bleed {
+      display: none;
+    }
+  }
+
+  /* ─── Reduced motion ─────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .bbb-edge,
+    .bbb-haze {
+      animation: none;
+    }
+  }
+</style>
