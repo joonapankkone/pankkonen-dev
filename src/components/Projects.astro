@@ -46,7 +46,7 @@ const projects: Project[] = [
     accent: 'blue',
     title: 'Future Factory — Team Fearless',
     teaser:
-      'Led a 6-person cross-functional team delivering a PrestaShop e-commerce platform across six Agile sprints and four Gate reviews.',
+      'JAMK Future Factory (10 ECTS): led a 6-person cross-functional team delivering a PrestaShop e-commerce platform across six Agile sprints and four Gate reviews.',
     tags: ['PrestaShop', 'Docker', 'GitLab CI/CD', 'CSC Allas', 'Scrum', 'ChatGPT'],
     stats: [
       { value: '6', label: 'team members' },
@@ -54,7 +54,7 @@ const projects: Project[] = [
       { value: '4', label: 'Gate reviews' },
     ],
     paragraphs: [
-      'Led a six-person cross-functional team building and deploying a PrestaShop e-commerce platform as a managed service — Docker containerisation, automated DB backup to CSC Allas, CI/CD on GitLab, payment integrations, and security hardening. Delivered across six Scrum sprints and four Gate reviews under the Essence Alpha framework.',
+      "Run as JAMK's Future Factory course (10 ECTS) — a project-based capstone where student teams act as a real software vendor for an external client. Led a six-person cross-functional team building and deploying a PrestaShop e-commerce platform as a managed service: Docker containerisation, automated DB backup to CSC Allas, CI/CD on GitLab, payment integrations, and security hardening. Delivered across six Scrum sprints and four Gate reviews under the Essence Alpha framework.",
       'The dual Team Leader and Developer role meant sprint planning, task allocation, and Product Owner collaboration. Gate 1 passed cleanly. The team covered the full scope: OPS, security, testing, two more developers. Documentation is public.',
     ],
     links: [
@@ -67,17 +67,16 @@ const projects: Project[] = [
     accent: 'cyan',
     title: 'pankkonen.dev',
     teaser:
-      'A portfolio built from scratch — Astro, GSAP scroll animations, and a design system inspired by Revolut.',
-    tags: ['Astro', 'Claude', 'Tailwind CSS', 'GSAP', 'TypeScript', 'Cloudflare Pages'],
+      'A portfolio built from scratch — Astro, scroll-triggered reveals, and a design system inspired by modern sites.',
+    tags: ['Astro', 'Claude', 'Tailwind CSS', 'TypeScript', 'Cloudflare Pages'],
     stats: [
-      { value: 'Spring',         label: 'scroll easing (0.16, 1, 0.3, 1)' },
-      { value: 'Claude Cowork',  label: 'pair-build environment' },
-      { value: 'CF Pages',       label: 'deployment' },
+      { value: '11',             label: 'components, scratch-built' },
+      { value: 'Claude Cowork',  label: 'agent pair-build · I directed' },
+      { value: '100',            label: 'Lighthouse · desktop perf score' },
     ],
     paragraphs: [
       'Built with a clear division of labour: I architected and directed, Claude typed. The whole project ran in Cowork mode — Claude reading and writing files in the workspace directly, while I made the design and direction calls. Every decision — palette, animation parameters, the expanding panel you just clicked open — stayed mine.',
-      'Built from scratch with a clear design intent — something a recruiter would remember. Astro handles the build, scoped CSS components keep specificity manageable, and GSAP drives the hero entrance animation. The scroll reveal system uses IntersectionObserver with a double requestAnimationFrame trick to prevent skipped transitions.',
-      "Every animation replays on scroll in both directions, spring easing (cubic-bezier 0.16, 1, 0.3, 1) throughout, and the expanding panel you're inside right now was designed before a line of CSS was written. The design system — tokens, typography scale, spacing — lives in global.css and is documented in DESIGN_SPEC.md.",
+      'Built from scratch with Astro for the build, scoped CSS components for specificity control, and GSAP for the hero entrance. Scroll reveals run on IntersectionObserver with a double-rAF trick to prevent skipped transitions, and spring easing (cubic-bezier 0.16, 1, 0.3, 1) carries hover, reveal, and the expanding panel motion. The design system — tokens, typography scale, spacing — lives in global.css and is documented in DESIGN_SPEC.md.',
     ],
     links: [
       { href: 'https://github.com/joonapankkone/pankkonen-dev', label: 'GitHub', style: 'primary', disabled: false },
@@ -98,8 +97,8 @@ const projects: Project[] = [
       </h2>
       <p class="proj-lede" data-reveal data-reveal-delay="2">
         From 2.6M-row ML pipelines to a 6-person Agile team — each project here
-        has a GitHub repo, a story, and something honest to say about what didn't
-        go perfectly.
+        has a working artifact, a story, and something honest to say about what
+        didn't go perfectly.
       </p>
     </header>
 

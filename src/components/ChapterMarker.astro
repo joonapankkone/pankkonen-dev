@@ -245,9 +245,17 @@ const sections = [
   const hero = document.querySelector<HTMLElement>('#hero');
 
   if (nav && hero) {
+    // Initial state: hidden + inert. `inert` removes the rail's links
+    // from the keyboard tab order while invisible, so a keyboard user
+    // tabbing through the page never lands on a hidden anchor that
+    // would scroll-jump the page and then disappear mid-focus.
+    nav.toggleAttribute('inert', true);
+
     const heroIO = new IntersectionObserver(
       ([entry]) => {
-        nav.classList.toggle('visible', !entry.isIntersecting);
+        const visible = !entry.isIntersecting;
+        nav.classList.toggle('visible', visible);
+        nav.toggleAttribute('inert', !visible);
       },
       { threshold: 0.1 }
     );

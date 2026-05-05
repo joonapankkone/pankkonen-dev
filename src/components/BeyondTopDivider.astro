@@ -4,8 +4,8 @@
 // Width: min(100vw, calc(85vh * 16 / 9)) — tracks .beyond-stage exactly.
 // Centred within a 100vw outer wrapper (same pattern as .beyond).
 //
-// Animation: amber line sweeps left→right (scaleX from left, 1400ms ease-out),
-// followed by a shimmer flash (70px element, 1300ms linear) that travels
+// Animation: amber line sweeps left→right (scaleX from left, 1100ms ease-out),
+// followed by a shimmer flash (70px element, 950ms linear) that travels
 // the full inner width. Both animations REPLAY on every scroll pass via the
 // [data-rule-reveal] / global IO pattern: removing is-visible resets the
 // @keyframes (no fill-mode:forwards), re-adding it restarts from frame 0.
@@ -65,7 +65,7 @@
   }
 
   .beyond-top-rule.is-visible .btr-glow {
-    animation: btr-line-in 1400ms ease-out forwards;
+    animation: btr-line-in 1100ms ease-out forwards;
   }
 
   /* ─── Crisp amber hairline — sweeps left→right on reveal ── */
@@ -91,7 +91,7 @@
   /* No fill-mode:forwards → snaps back to scaleX(0) on removal,  */
   /* so the animation replays cleanly on every re-entry.           */
   .beyond-top-rule.is-visible .btr-line {
-    animation: btr-line-in 1400ms ease-out forwards;
+    animation: btr-line-in 1100ms ease-out forwards;
   }
 
   @keyframes btr-line-in {
@@ -105,9 +105,9 @@
   /* width, no JS measurement needed.                             */
   /*                                                              */
   /* Duration 1300ms, delay 500ms:                               */
-  /*   - Shimmer starts when the line is ~36% extended            */
-  /*   - Visible window (opacity on 10%→90%) = 80% × 1300 ≈ 1040ms */
-  /*   - Bright centre visible for the middle ~500ms of that pass */
+  /*   - Shimmer starts when the line is ~31% extended            */
+  /*   - Visible window (opacity on 10%→90%) = 80% × 950 ≈ 760ms  */
+  /*   - Bright centre visible for the middle ~400ms of that pass */
   .btr-sweep {
     display: block;
     position: absolute;
@@ -130,8 +130,8 @@
   }
 
   .beyond-top-rule.is-visible .btr-sweep {
-    animation: btr-shimmer 1300ms linear forwards;
-    animation-delay: 500ms;
+    animation: btr-shimmer 950ms linear forwards;
+    animation-delay: 400ms;
   }
 
   @keyframes btr-shimmer {

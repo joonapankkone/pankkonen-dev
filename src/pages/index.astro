@@ -13,9 +13,7 @@ import BeyondBottomDivider from '../components/BeyondBottomDivider.astro';
 ---
 
 <Layout>
-  <ChapterMarker />
-
-  <section class="hero container" id="hero">
+  <section class="hero container" id="hero" aria-labelledby="hero-name">
 
     <!-- Left column -->
     <div class="hero-left">
@@ -45,14 +43,21 @@ import BeyondBottomDivider from '../components/BeyondBottomDivider.astro';
     <!-- Right column: photo -->
     <div class="hero-right" id="hero-image">
       <div class="hero-photo-wrap">
-        <img
-          src="/joona.jpeg"
-          alt="Joona Pankkonen"
-          class="hero-photo"
-          width="440"
-          height="587"
-          loading="eager"
-        />
+        <!-- AVIF / WebP / JPEG fallback. Source order = browser picks first supported.
+             AVIF ~29 KB · WebP ~43 KB · JPEG ~223 KB (legacy fallback). -->
+        <picture>
+          <source srcset="/joona.avif" type="image/avif" />
+          <source srcset="/joona.webp" type="image/webp" />
+          <img
+            src="/joona.jpeg"
+            alt="Joona Pankkonen"
+            class="hero-photo"
+            width="440"
+            height="587"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </picture>
         <!-- Bottom fade: blends photo into page background -->
         <div class="photo-fade-bottom"></div>
         <!-- Subtle blue glow accent -->
@@ -89,6 +94,11 @@ import BeyondBottomDivider from '../components/BeyondBottomDivider.astro';
   <!-- 05 · CONTACT -->
   <Contact />
 
+  <!-- Sticky right-rail wayfinder. Placed last in DOM so keyboard tab    -->
+  <!-- order reaches it AFTER the main content (skip-link → hero CTA →   -->
+  <!-- project cards → contact links → chapter rail → top of page).      -->
+  <ChapterMarker />
+
 </Layout>
 
 <style>
@@ -111,12 +121,16 @@ import BeyondBottomDivider from '../components/BeyondBottomDivider.astro';
   }
 
   /* ─── Eyebrow row (eyebrow + divider + status) ─────────────── */
+  /* Initial opacity is handled by the heroStaggerReveal keyframes  */
+  /* (`from { opacity: 0 }` + animation-fill-mode: both). Setting    */
+  /* opacity:0 here in base CSS would leave the element invisible    */
+  /* if animations don't run (e.g. Lighthouse headless Chrome with   */
+  /* certain throttling profiles) → NO_FCP. Default opacity:1.       */
   .hero-eyebrow-row {
     display: flex;
     align-items: center;
     gap: 24px;
     margin-bottom: 56px;
-    opacity: 0;
   }
 
   .hero-eyebrow {
@@ -138,7 +152,6 @@ import BeyondBottomDivider from '../components/BeyondBottomDivider.astro';
     font-size: var(--text-display-xl);
     color: var(--text);
     margin-bottom: var(--space-3);
-    opacity: 0;
   }
 
   .hero-tagline {
@@ -149,7 +162,6 @@ import BeyondBottomDivider from '../components/BeyondBottomDivider.astro';
     max-width: 20ch;
     margin-bottom: 48px;
     color: var(--text);
-    opacity: 0;
   }
 
   .hero-italic {
@@ -187,10 +199,8 @@ import BeyondBottomDivider from '../components/BeyondBottomDivider.astro';
   }
 
   /* ─── Single CTA ───────────────────────────────────────────── */
-  /* `.btn` / `.btn-ghost` rules live in global.css; just init     */
-  /* opacity for the GSAP entrance.                                */
+  /* `.btn` / `.btn-ghost` rules live in global.css.                */
   #hero-cta {
-    opacity: 0;
     align-self: flex-start; /* prevent flex-column stretch to full width */
   }
 
@@ -199,7 +209,6 @@ import BeyondBottomDivider from '../components/BeyondBottomDivider.astro';
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 0;
   }
 
   .hero-photo-wrap {
@@ -212,6 +221,11 @@ import BeyondBottomDivider from '../components/BeyondBottomDivider.astro';
     box-shadow:
       0 0 0 1px var(--rule),
       0 0 40px 0 rgba(59, 130, 246, 0.08);
+  }
+
+  /* Ensure <picture> wrapper doesn't introduce inline-element gaps */
+  .hero-photo-wrap picture {
+    display: block;
   }
 
   .hero-photo {
@@ -279,25 +293,60 @@ import BeyondBottomDivider from '../components/BeyondBottomDivider.astro';
   .section-divider {
     padding-block: var(--space-3);
   }
+
+  /* ─── Hero load stagger (CSS-only, replaces GSAP) ──────────── */
+  /* Each element starts at opacity:0 + translateY(24px) (set in        */
+  /* their per-section rules above), then animates to its rest state    */
+  /* with power2.out-equivalent easing. animation-fill-mode: backwards  */
+  /* holds the initial state through the pre-delay so nothing flashes.  */
+  @keyframes heroStaggerReveal {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+
+  /* LCP-safe image reveal: opacity stays 1 throughout so Lighthouse    */
+  /* can measure LCP immediately on image load. Only transform animates. */
+  /* animation-fill-mode: backwards would hold opacity:0 during the     */
+  /* delay → NO_LCP. We set the initial transform in CSS instead and    */
+  /* use fill-mode: forwards only.                                       */
+  @keyframes heroImageReveal {
+    from { transform: translateY(24px); }
+    to   { transform: translateY(0);    }
+  }
+
+  #hero-eyebrow-row,
+  #hero-name,
+  #hero-tagline,
+  #hero-cta {
+    animation: heroStaggerReveal 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+  }
+
+  /* Hero image: transform-only animation, opacity always 1 (LCP fix). */
+  #hero-image {
+    transform: translateY(24px); /* hold start position — no fill-mode:backwards needed */
+    animation: heroImageReveal 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) 0.35s forwards;
+  }
+
+  #hero-eyebrow-row { animation-duration: 0.6s; animation-delay: 0.10s; }
+  #hero-name        { animation-duration: 0.7s; animation-delay: 0.25s; }
+  #hero-tagline     { animation-duration: 0.6s; animation-delay: 0.45s; }
+  #hero-cta         { animation-duration: 0.5s; animation-delay: 0.60s; }
+
+  /* Reduced motion: skip the entrance — hold rest state immediately. */
+  @media (prefers-reduced-motion: reduce) {
+    #hero-eyebrow-row,
+    #hero-name,
+    #hero-tagline,
+    #hero-cta,
+    #hero-image {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
 </style>
 
 <script>
-  import { gsap } from 'gsap';
-
-  // ─── Hero load stagger ─────────────────────────────────────
-  gsap.set(['#hero-eyebrow-row', '#hero-name', '#hero-tagline', '#hero-cta', '#hero-image'], {
-    y: 24,
-  });
-
-  const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-
-  tl
-    .to('#hero-eyebrow-row', { opacity: 1, y: 0, duration: 0.6 }, 0.1)
-    .to('#hero-name',        { opacity: 1, y: 0, duration: 0.7 }, 0.25)
-    .to('#hero-tagline',     { opacity: 1, y: 0, duration: 0.6 }, 0.45)
-    .to('#hero-cta',         { opacity: 1, y: 0, duration: 0.5 }, 0.6)
-    .to('#hero-image',       { opacity: 1, y: 0, duration: 0.7 }, 0.35);
-
   // ─── Scroll reveal ─────────────────────────────────────────
   // Spring easing + 28px lift — all [data-reveal] elements.
   // Section headers use individual child reveals for stagger.

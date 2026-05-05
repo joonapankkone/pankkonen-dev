@@ -8,7 +8,7 @@ interface Props {
 
 const {
   title = 'Joona Pankkonen — IT Engineer & Data Analyst',
-  description = 'Portfolio of Joona Pankkonen — IT Engineering student specializing in data analytics and AI, based in Jyväskylä, Finland.',
+  description = 'Portfolio of Joona Pankkonen — IT Engineer specializing in data analytics, machine learning, and AI workflows. Based in Jyväskylä, Finland. Two-time DiRT Rally world champion.',
 } = Astro.props;
 ---
 
@@ -26,7 +26,10 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/joona.jpeg" />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Joona Pankkonen — Data. Code. Systems. And a 2× world title on the side." />
     <meta property="og:locale" content="en_US" />
     <meta property="og:site_name" content="pankkonen.dev" />
 
@@ -34,15 +37,35 @@ const {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="/joona.jpeg" />
+    <meta name="twitter:image" content="/og-image.jpg" />
 
-    <!-- Fonts: parallel preconnect + stylesheet for fastest paint -->
+    <!-- Preload LCP hero image — AVIF (smallest, ~29 KB). Browser ignores -->
+    <!-- this hint if AVIF isn't supported and falls back to WebP/JPEG     -->
+    <!-- via the <picture> sources in the HTML. fetchpriority="high" tells -->
+    <!-- the browser to fetch this before discovering it in the HTML,      -->
+    <!-- cutting one waterfall round-trip off LCP.                         -->
+    <link rel="preload" as="image" href="/joona.avif" type="image/avif" fetchpriority="high" />
+
+    <!-- Fonts: preconnect + non-blocking stylesheet load.                  -->
+    <!-- The media="print" + onload="this.media='all'" trick stops the     -->
+    <!-- stylesheet from blocking the initial render. font-display: swap   -->
+    <!-- (in the URL) keeps the page readable with fallback fonts until    -->
+    <!-- the woff2 files arrive. <noscript> fallback ensures the           -->
+    <!-- stylesheet still loads when JS is disabled.                        -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+      />
+    </noscript>
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>

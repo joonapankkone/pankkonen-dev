@@ -61,10 +61,6 @@ const categories: Category[] = [
         Tools I reach for<br />
         <span class="stack-accent">without thinking.</span>
       </h2>
-      <p class="stack-lede" data-reveal data-reveal-delay="2">
-        Compact 4-column index — hover for a row glow.
-        Monospace keys, hairline rules, no card chrome. Minimal but alive.
-      </p>
     </header>
 
     <div class="stack-cols" data-reveal data-reveal-delay="3">
@@ -106,15 +102,10 @@ const categories: Category[] = [
 
   /* ─── Header ──────────────────────────────────────────────── */
   .stack-header {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: var(--space-8);
-    align-items: end;
     margin-bottom: var(--space-3);
   }
 
   .stack-heading {
-    grid-column: 1 / 2;
     font-size: var(--text-display-l);
     color: var(--text);
     line-height: 1.02;
@@ -124,16 +115,6 @@ const categories: Category[] = [
     color: var(--primary-soft);
     font-style: italic;
     font-weight: 300;
-  }
-
-  .stack-lede {
-    grid-column: 2 / 3;
-    color: var(--text-muted);
-    font-size: var(--text-body-l);
-    line-height: 1.55;
-    max-width: 46ch;
-    justify-self: end;
-    padding-bottom: 6px;
   }
 
   /* ─── Compact 4-column index ──────────────────────────────── */
@@ -302,14 +283,7 @@ const categories: Category[] = [
       padding-block: var(--space-8);
     }
 
-    .stack-header {
-      grid-template-columns: 1fr;
-      gap: var(--space-3);
-      align-items: start;
-    }
-
-    .stack-heading { grid-column: 1 / -1; font-size: 40px; }
-    .stack-lede    { grid-column: 1 / -1; justify-self: start; }
+    .stack-heading { font-size: 40px; }
 
     .stack-cols {
       grid-template-columns: 1fr;
