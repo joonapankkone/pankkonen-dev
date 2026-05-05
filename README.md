@@ -8,7 +8,7 @@ The reference aesthetic is a blend of modern fintech and editorial sites: deep n
 
 - **Framework:** Astro (static HTML at build time, component-based)
 - **Styles:** Tailwind CSS + handwritten `global.css` for tokens and motion
-- **Animation:** GSAP for the hero load timeline; `IntersectionObserver` + CSS keyframes for scroll reveals
+- **Animation:** CSS-only keyframes for the hero load stagger (`heroStaggerReveal` + `heroImageReveal`); `IntersectionObserver` + CSS keyframes for scroll reveals — no animation library at runtime
 - **Hosting:** Cloudflare Pages (auto-deploy on push to `main`)
 - **Domain:** `pankkonen.dev` (purchase deferred; development URL `pankkonen.pages.dev`)
 
@@ -16,7 +16,7 @@ The reference aesthetic is a blend of modern fintech and editorial sites: deep n
 
 | Phase | Area | Status |
 |-------|------|--------|
-| 1 | Scaffolding — Astro + Tailwind + GSAP | Complete |
+| 1 | Scaffolding — Astro + Tailwind + CSS animations | Complete |
 | 2 | Design system — tokens, fonts, layout primitives | Complete |
 | 3 | Hero — name, tagline, photo, load stagger | Complete |
 | 4 | Experience & Stack sections (4 categories incl. AI Workflow) | Complete |
@@ -61,8 +61,8 @@ docs/superpowers/               # locked specs and execution plans
 ## Design guarantees
 
 - Dark only; no light-mode toggle in v1
-- Motion uses spring easing `cubic-bezier(0.16, 1, 0.3, 1)` with 28px lift at 750ms
-- Hero entrance animations are CSS-only (`@keyframes heroStaggerReveal` + `heroImageReveal`); no animation library at runtime
+- Scroll-reveal motion uses spring easing `cubic-bezier(0.16, 1, 0.3, 1)` with 28px lift at 750ms; hover and panel transitions use the same curve
+- Hero entrance animations are CSS-only (`@keyframes heroStaggerReveal` + `heroImageReveal`); no animation library at runtime. Hero uses `cubic-bezier(0.215, 0.61, 0.355, 1)` (power2.out) at 600–700ms — intentionally snappier than the scroll-reveal spring
 - Section dividers replay on every scroll pass (both directions)
 - Reduced-motion users get revealed content with no transitions; ambient background videos pause and show their poster frame
 - Beyond the Code video plays only while the section is in the viewport (IO-gated); muted, looped, no controls — pure ambient element

@@ -65,7 +65,7 @@
   }
 
   .beyond-top-rule.is-visible .btr-glow {
-    animation: btr-line-in 1100ms ease-out forwards;
+    animation: btr-line-in 880ms ease-out forwards;
   }
 
   /* ─── Crisp amber hairline — sweeps left→right on reveal ── */
@@ -91,7 +91,7 @@
   /* No fill-mode:forwards → snaps back to scaleX(0) on removal,  */
   /* so the animation replays cleanly on every re-entry.           */
   .beyond-top-rule.is-visible .btr-line {
-    animation: btr-line-in 1100ms ease-out forwards;
+    animation: btr-line-in 880ms ease-out forwards;
   }
 
   @keyframes btr-line-in {
@@ -112,33 +112,35 @@
     display: block;
     position: absolute;
     top: -1px;
-    left: -100px;          /* starts fully off-screen left */
-    width: 70px;
+    left: -180px;          /* starts fully off-screen left (wider element) */
+    width: 180px;
     height: 4px;
     background: linear-gradient(
       90deg,
       transparent                    0%,
-      rgba(255, 255, 255, 0.18)     28%,
-      rgba(255, 255, 255, 0.92)     50%,
-      rgba(255, 255, 255, 0.18)     72%,
+      rgba(245, 158, 11, 0.20)      12%,
+      rgba(255, 220, 120, 0.55)     30%,
+      rgba(255, 255, 255, 0.98)     50%,
+      rgba(255, 220, 120, 0.55)     70%,
+      rgba(245, 158, 11, 0.20)      88%,
       transparent                   100%
     );
     border-radius: 2px;
-    filter: blur(0.4px);
+    filter: blur(0.6px);
     opacity: 0;
     pointer-events: none;
   }
 
   .beyond-top-rule.is-visible .btr-sweep {
-    animation: btr-shimmer 950ms linear forwards;
-    animation-delay: 400ms;
+    animation: btr-shimmer 760ms linear forwards;
+    animation-delay: 460ms;
   }
 
   @keyframes btr-shimmer {
-    0%   { left: -100px; opacity: 0; }
+    0%   { left: -180px; opacity: 0; }
     10%  { opacity: 1; }
     90%  { opacity: 1; }
-    100% { left: calc(100% + 100px); opacity: 0; }
+    100% { left: calc(100% + 180px); opacity: 0; }
   }
 
   /* ─── Reduced motion ─────────────────────────────────────── */
