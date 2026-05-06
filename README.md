@@ -9,8 +9,8 @@ The reference aesthetic is a blend of modern fintech and editorial sites: deep n
 - **Framework:** Astro (static HTML at build time, component-based)
 - **Styles:** Tailwind CSS + handwritten `global.css` for tokens and motion
 - **Animation:** CSS-only keyframes for the hero load stagger (`heroStaggerReveal` + `heroImageReveal`); `IntersectionObserver` + CSS keyframes for scroll reveals — no animation library at runtime
-- **Hosting:** Cloudflare Pages (auto-deploy on push to `main`)
-- **Domain:** `pankkonen.dev` (purchase deferred; development URL `pankkonen.pages.dev`)
+- **Hosting:** Cloudflare Workers Assets (auto-deploy on push to `main`)
+- **Domain:** `pankkonen.dev` — live
 
 ## Build progress
 
@@ -27,8 +27,8 @@ The reference aesthetic is a blend of modern fintech and editorial sites: deep n
 | 6c | Polish — chapter rail, divider v3 (StackDivider + ProjectsDivider), Projects card count-up, About-konsolidointi | Complete (2026-05-02) |
 | 7 | Contact | Complete |
 | 8 | Polish & accessibility (Lighthouse 100/99) | Complete (2026-05-05) |
-| 9 | Cloudflare Pages deploy | Pending |
-| 10 | Final content & domain switch | Pending |
+| 9 | Cloudflare Workers Assets deploy (wrangler.toml, auto-deploy on push) | Complete (2026-05-06) |
+| 10 | Domain switch — `pankkonen.dev` live, v1.0 published | Complete (2026-05-06) |
 
 ## Commands
 
@@ -56,6 +56,8 @@ src/
 └── styles/global.css           # design tokens, motion, section divider
 public/                         # joona.{avif,webp,jpeg}, btc-sim.mp4 + poster
 docs/superpowers/               # locked specs and execution plans
+wrangler.toml                   # Cloudflare Workers Assets config (assets.directory = dist)
+.node-version                   # pins Node 22 for CF build environment
 ```
 
 ## Design guarantees
@@ -90,4 +92,4 @@ Notable optimisations:
 
 Re-run with: `npm run build && npm run preview`, then Chrome DevTools → Lighthouse. Keep the tab in the foreground throughout the audit.
 
-Links: [GitHub](https://github.com/joonapankkone/pankkonen-dev)
+Links: [Live site](https://pankkonen.dev) · [GitHub](https://github.com/joonapankkone/pankkonen-dev)
