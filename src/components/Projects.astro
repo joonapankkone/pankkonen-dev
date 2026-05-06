@@ -125,9 +125,14 @@ const projects: Project[] = [
             <h3 class="proj-card-title">{p.title}</h3>
             <p class="proj-card-teaser">{p.teaser}</p>
             <ul class="proj-card-tags" role="list">
-              {p.tags.slice(0, 4).map((tag) => (
+              {p.tags.slice(0, 3).map((tag) => (
                 <li class="proj-tag mono">{tag}</li>
               ))}
+              {p.tags.length > 3 && (
+                <li class="proj-tag proj-tag--more mono" aria-label={`${p.tags.length - 3} more`}>
+                  +{p.tags.length - 3}
+                </li>
+              )}
             </ul>
           </article>
           <div
@@ -365,11 +370,14 @@ const projects: Project[] = [
   .proj-card-tags {
     list-style: none;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    align-items: center;
     gap: 6px;
+    height: 36px;
     padding-top: var(--space-1);
     border-top: 1px solid var(--rule);
     margin-top: auto;
+    overflow: hidden;
   }
 
   .proj-tag {
@@ -379,6 +387,14 @@ const projects: Project[] = [
     font-size: 11px;
     color: var(--text-muted);
     letter-spacing: 0.04em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .proj-tag--more {
+    color: var(--text);
+    border-color: rgba(96, 165, 250, 0.25);
+    background: rgba(59, 130, 246, 0.04);
   }
 
   /* ─── Panel container ─────────────────────────────────────── */
