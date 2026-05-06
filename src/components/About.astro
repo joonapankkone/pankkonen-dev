@@ -8,11 +8,28 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
 // btc-sim-poster.jpg. See docs/superpowers/specs/2026-05-01-beyond-fullbleed-and-copy-design.md.
 ---
 
-<!-- Divider: projects → beyond the code (video-width amber sweep) -->
-<BeyondTopDivider />
+<!-- Divider: projects → beyond the code (desktop only — hidden on mobile) -->
+<div class="btd-desktop-wrap">
+  <BeyondTopDivider />
+</div>
 
 <!-- ── 04 · BEYOND THE CODE — full-bleed frame + 16:9 video stage ── -->
-<section class="beyond" id="beyond" aria-labelledby="beyond-heading">
+<section class="beyond" id="beyond" aria-label="Beyond the Code">
+
+  <!-- Mobile-only: chapter mark + headline (above divider + video) -->
+  <div class="beyond__copy-top">
+    <p class="beyond__chapter">04 · Beyond the Code</p>
+    <h2 class="beyond__heading">
+      A competitive mindset,<br />
+      <em>applied beyond code</em>.
+    </h2>
+  </div>
+
+  <!-- Mobile-only: animated sweep divider right above the video -->
+  <div class="beyond__divider-wrap">
+    <BeyondTopDivider />
+  </div>
+
   <div class="beyond-stage">
     <video
       class="beyond-video"
@@ -30,20 +47,32 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
     </video>
     <div class="beyond-scrim" aria-hidden="true"></div>
 
-    <!-- Stage banner: event label (top-right) -->
+    <!-- Mobile-only: bottom fade that dissolves into --bg -->
+    <div class="beyond__media-fade" aria-hidden="true"></div>
+
+    <!-- Desktop-only: stage banner (top-right) -->
     <div class="beyond-banner" aria-hidden="true">
       <span class="beyond-banner-dot"></span>
       <span class="mono">ESPORTS WRC KNOCKOUT TROPHY '23</span>
     </div>
 
-    <!-- Chapter mark (top-left) -->
+    <!-- Desktop-only: chapter mark (top-left) -->
     <div class="beyond-chapter">
-      <p class="mono">04 / 05 · Beyond the Code</p>
+      <p class="mono">04 · Beyond the Code</p>
     </div>
 
+    <!-- Mobile-only: race tag overlay (top-left, inside dark veil) -->
+    <div class="beyond__meta" aria-hidden="true">
+      <span class="beyond__race">
+        <span class="beyond__dot" aria-hidden="true"></span>
+        ESPORTS WRC '23
+      </span>
+    </div>
+
+    <!-- Desktop-only: text content anchored to stage bottom -->
     <div class="beyond-inner">
       <div class="container">
-        <h2 class="beyond-heading" id="beyond-heading" data-reveal>
+        <h2 class="beyond-heading" data-reveal>
           A competitive mindset,<br />
           <span class="beyond-accent">applied beyond code</span>.
         </h2>
@@ -54,16 +83,19 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
       </div>
     </div>
   </div>
+
+  <!-- Mobile-only: paragraph pulled up into the bottom-fade tail -->
+  <div class="beyond__copy-bottom">
+    <p class="beyond__lede">
+      Two-time DiRT Rally world champion with a competitive sim racing background.
+      These days, gym training, outdoor activities, open water swimming, and Latin dance.
+    </p>
+  </div>
+
 </section>
 
 <style>
   /* ─── 04 · Beyond the Code — outer frame + 16:9 stage ────── */
-  /* Outer frame is full-bleed (100vw); stage caps width so the video
-     always renders at 16:9 with no crop, regardless of viewport.
-     On screens wider than calc(85vh * 16/9), the page bg shows on
-     the sides of the stage — same pattern as Linear / Vercel hero
-     sections. On screens narrower than that threshold, stage fills
-     the viewport edge to edge. */
   .beyond {
     width: 100vw;
     max-width: 100vw;
@@ -113,7 +145,6 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    /* 58px — close to the stage edge but with enough room to breathe */
     padding-block-end: 58px;
   }
 
@@ -127,9 +158,6 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
     margin: 0;
   }
 
-  /* The chapter mark overlay already labels the section —
-     suppress the ::before rule-line on the inner copy so it
-     doesn't double up with the global .section-index style. */
   .beyond-inner .section-index::before {
     display: none;
   }
@@ -155,7 +183,7 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
     margin: 0;
   }
 
-  /* ─── Stage banner (top-right) ──────────────────────────── */
+  /* ─── Stage banner (top-right, desktop only) ────────────── */
   .beyond-banner {
     position: absolute;
     top: 32px;
@@ -184,7 +212,7 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
     flex-shrink: 0;
   }
 
-  /* ─── Chapter mark (top-left) ────────────────────────────── */
+  /* ─── Chapter mark (top-left, desktop only) ─────────────── */
   .beyond-chapter {
     position: absolute;
     top: 32px;
@@ -198,6 +226,20 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
 
   .beyond-chapter p {
     margin: 0;
+  }
+
+  /* ─── Mobile-only elements — hidden on desktop ───────────── */
+  .beyond__copy-top,
+  .beyond__divider-wrap,
+  .beyond__meta,
+  .beyond__media-fade,
+  .beyond__copy-bottom {
+    display: none;
+  }
+
+  /* ─── Desktop-only wrapper: section-separator divider ───── */
+  .btd-desktop-wrap {
+    display: block;
   }
 
   /* ─── Scroll reveal ──────────────────────────────────────── */
@@ -219,79 +261,168 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
     transform: translateY(0);
   }
 
-  /* ─── Mobile ─────────────────────────────────────────────── */
+  /* ─── Mobile ≤ 768px ─────────────────────────────────────── */
   @media (max-width: 768px) {
-    /* Stage banner and chapter mark are redundant at mobile width */
-    .beyond-banner,
-    .beyond-chapter {
+
+    /* Stack the section vertically; full-bleed with no side padding */
+    .beyond {
+      flex-direction: column;
+      justify-content: flex-start;
+      width: 100vw;
+      max-width: 100vw;
+      margin-inline: calc(50% - 50vw);
+      padding-inline: 0;
+      padding-block: 0;
+      background: var(--bg);
+    }
+
+    /* ── 1. Chapter mark + headline ────────────────────────── */
+    .beyond__copy-top {
+      display: block;
+      padding: 32px 20px 24px;
+    }
+
+    .beyond__chapter {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0 0 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .beyond__chapter::before {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--rule);
+      flex-shrink: 0;
+    }
+
+    .beyond__heading {
+      font-family: var(--font-display);
+      font-size: 36px;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .beyond__heading em {
+      color: var(--primary-soft);
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    /* ── 2. Animated sweep divider (same as desktop) ────────── */
+    /* Desktop section-separator hidden; in-section instance shown */
+    .btd-desktop-wrap {
       display: none;
     }
 
-    .about {
-      padding-block: var(--space-8) var(--space-8);
-    }
-
-    .about-header {
-      grid-template-columns: 1fr;
-    }
-
-    .about-heading {
-      grid-column: 1 / -1;
-    }
-
-    .about-body {
-      grid-template-columns: 1fr;
-      gap: var(--space-5);
-    }
-
-    /* Beyond — revert to natural document flow on mobile (video on top, then text) */
-    .beyond {
-      width: 100%;
-      max-width: 100%;
-      margin-inline: 0;
-      padding-inline: var(--space-5);
-      padding-block: var(--space-8);
+    .beyond__divider-wrap {
       display: block;
     }
 
+    /* ── 3. Video block — portrait 4/5, full-bleed ─────────── */
     .beyond-stage {
+      position: relative;
       width: 100%;
-      aspect-ratio: auto;
-      overflow: visible;
-      isolation: auto;
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-6);
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      isolation: isolate;
     }
 
-    .beyond-video {
-      position: static;
-      width: 100%;
-      max-width: 480px;
-      height: auto;
-      aspect-ratio: 16 / 9;
-      border-radius: 14px;
-      box-shadow: 0 0 0 1px var(--rule);
-      object-fit: cover;
-      align-self: center;
-    }
-
+    /* Desktop scrim hidden — mobile uses beyond__media-fade instead */
     .beyond-scrim {
       display: none;
     }
 
-    .beyond-inner {
-      position: static;
-      padding-block-end: 0;
+    /* Slight grade to compensate for removed scrim */
+    .beyond-video {
+      filter: contrast(1.05) saturate(0.9) brightness(0.85);
+    }
+
+    /* Mobile bottom fade — strong tail dissolving into --bg */
+    .beyond__media-fade {
       display: block;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background: linear-gradient(
+        180deg,
+        rgba(8, 8, 10, 0)    0%,
+        rgba(8, 8, 10, 0.10) 50%,
+        rgba(8, 8, 10, 0.60) 85%,
+        var(--bg)           100%
+      );
     }
 
-    .beyond-inner > .container {
-      gap: var(--space-3);
+    /* Desktop-only stage elements: hidden on mobile */
+    .beyond-chapter,
+    .beyond-banner,
+    .beyond-inner {
+      display: none;
     }
 
-    .beyond-inner .beyond-heading {
-      margin-block: 0 var(--space-2);
+    /* Mobile race tag — top-LEFT, inside dark gradient veil */
+    .beyond__meta {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 3;
+      padding: 14px 20px;
+      background: linear-gradient(
+        180deg,
+        rgba(8, 8, 10, 0.85) 0%,
+        rgba(8, 8, 10, 0)    100%
+      );
+    }
+
+    .beyond__race {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      white-space: nowrap;
+    }
+
+    .beyond__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 6px rgba(245, 158, 11, 0.7);
+      flex-shrink: 0;
+    }
+
+    /* ── 4. Paragraph — pulled up into the bottom-fade tail ─── */
+    .beyond__copy-bottom {
+      display: block;
+      position: relative;
+      z-index: 4;
+      margin-top: -24px;
+      padding: 0 20px 32px;
+    }
+
+    .beyond__lede {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin: 0;
+      max-width: 40ch;
     }
   }
 </style>

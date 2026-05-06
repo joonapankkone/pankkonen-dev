@@ -82,7 +82,7 @@ const rows = Math.max(work.length, study.length);
          (row 2..N+1) is shared across both columns so work[i] and
          study[i] size to the same height — Road Closing lines up
          with Vocational ICT regardless of description length. -->
-    <div class="exp-tracks" data-reveal data-reveal-delay="3" data-stacked={rows}>
+    <div class="exp-tracks" data-reveal data-reveal-exp data-reveal-delay="3" data-stacked={rows}>
 
       <header class="track-head" data-track="work" data-col="1">
         <span class="mono track-glyph">◆ Work</span>
@@ -462,3 +462,23 @@ const rows = Math.max(work.length, study.length);
     }
   }
 </style>
+
+<script>
+  // Early reveal for the work/study tracks — triggers ~4vh before the global
+  // observer (rootMargin bottom -2% vs the global -6%). Only adds is-visible;
+  // removal is handled by the global observer in index.astro which has the
+  // debounce + offscreen gate logic.
+  const el = document.querySelector('[data-reveal-exp]');
+  if (el && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            el.classList.add('is-visible');
+          }));
+        }
+      },
+      { rootMargin: '-8% 0px -2% 0px', threshold: 0.01 }
+    ).observe(el);
+  }
+</script>
