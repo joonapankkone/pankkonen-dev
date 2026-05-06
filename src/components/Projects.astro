@@ -28,9 +28,9 @@ const projects: Project[] = [
       'Predicting used car prices across 2.6M listings with three ensemble models and honest segment-level results.',
     tags: ['Python', 'Polars', 'XGBoost', 'CatBoost', 'LightGBM', 'Optuna', 'scikit-learn', 'Claude', 'ChatGPT'],
     stats: [
-      { value: '2,600,000',    label: 'rows processed' },
-      { value: '3',            label: 'models compared' },
-      { value: 'K-fold + Optuna', label: 'hyperparameter search' },
+      { value: '2,600,000', label: 'rows processed' },
+      { value: '0.96',      label: 'R² · beat 0.88 target' },
+      { value: '2,136',     label: 'MAE USD · beat $3k target' },
     ],
     paragraphs: [
       'We built a full ML pipeline for used car price prediction: 2.6M rows processed with Polars, careful feature engineering to avoid target leakage, and a three-model comparison between XGBoost, CatBoost (ordered boosting), and LightGBM. Tuning ran through Optuna\'s Bayesian search with K-fold cross-validation.',
@@ -70,13 +70,13 @@ const projects: Project[] = [
       'A portfolio built from scratch — Astro, scroll-triggered reveals, and a design system inspired by modern sites.',
     tags: ['Astro', 'Claude', 'Tailwind CSS', 'TypeScript', 'Cloudflare Pages'],
     stats: [
-      { value: '11',             label: 'components, scratch-built' },
-      { value: 'Claude Cowork',  label: 'agent pair-build · I directed' },
-      { value: '100',            label: 'Lighthouse · desktop perf score' },
+      { value: 'Cloudflare Pages', label: 'CDN-deployed' },
+      { value: 'Claude Cowork',    label: 'agent pair-build · I directed' },
+      { value: '100',              label: 'Lighthouse · desktop perf score' },
     ],
     paragraphs: [
-      'Built with a clear division of labour: I architected and directed, Claude typed. The whole project ran in Cowork mode — Claude reading and writing files in the workspace directly, while I made the design and direction calls. Every decision — palette, animation parameters, the expanding panel you just clicked open — stayed mine.',
-      'Built from scratch with Astro for the build and scoped CSS components for specificity control. Hero entrance runs on CSS-only keyframes (no animation library at runtime); scroll reveals use IntersectionObserver with a double-rAF trick to prevent skipped transitions. Spring easing (cubic-bezier 0.16, 1, 0.3, 1) carries hover, reveal, and the expanding panel motion. The design system — tokens, typography scale, spacing — lives in global.css and is documented in DESIGN_SPEC.md.',
+      'Built with a clear division of labour: I architected and directed, Claude typed. The whole project ran across three Claude interfaces — Cowork, Code, and Design — while I handled architecture and direction throughout.',
+      'Built from scratch with Astro and scoped CSS components for specificity control. Hero entrance runs on CSS-only keyframes (no animation library at runtime); scroll reveals use IntersectionObserver with a double-rAF trick to prevent skipped transitions. Spring easing (cubic-bezier 0.16, 1, 0.3, 1) drives the reveals and panel expansion. The design system — tokens, typography scale, spacing — lives in global.css.',
     ],
     links: [
       { href: 'https://github.com/joonapankkone/pankkonen-dev', label: 'GitHub', style: 'primary', disabled: false },
@@ -730,7 +730,7 @@ const projects: Project[] = [
     }
     const target    = parseFloat(match[1]);
     const suffix    = match[2];
-    const decimals  = match[1].includes('.') ? 1 : 0;
+    const decimals  = match[1].includes('.') ? match[1].split('.')[1].length : 0;
     const useCommas = finalText.includes(',');
     const start     = performance.now();
     const easeOut   = (t: number) => 1 - Math.pow(1 - t, 3);

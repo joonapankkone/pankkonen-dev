@@ -68,7 +68,7 @@ wrangler.toml                   # Cloudflare Workers Assets config (assets.direc
 - Section dividers replay on every scroll pass (both directions)
 - Reduced-motion users get revealed content with no transitions; ambient background videos pause and show their poster frame
 - Beyond the Code video plays only while the section is in the viewport (IO-gated); muted, looped, no controls — pure ambient element
-- Beyond stage caps width at `min(100vw, 85vh × 16/9)` so the 16:9 sim racing clip is always shown in full at every viewport size, with the page background showing on the sides on screens wider than the cap (Linear / Vercel hero pattern)
+- Beyond stage caps width at `min(100vw, 85vh × 16/9)` on desktop so the 16:9 clip is always shown in full, with page background visible on ultra-wide screens (Linear / Vercel hero pattern). On mobile (≤768px) the stage switches to `aspect-ratio: 4/5` portrait, full-bleed, with a bottom fade dissolving into the page background instead of the desktop scrim
 
 ## Performance
 
