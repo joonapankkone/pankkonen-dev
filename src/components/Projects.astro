@@ -583,7 +583,11 @@ const projects: Project[] = [
 
   /* ─── Mobile ──────────────────────────────────────────────── */
   @media (max-width: 900px) {
-    .proj-grid { grid-template-columns: 1fr; }
+    /* minmax(0, 1fr) — not plain 1fr — so the track minimum is 0,        */
+    /* not "auto" (= min-content of items). Without this, the nowrap tag  */
+    /* pills can push the grid track wider than the container on narrow   */
+    /* phones (≤~370px), causing cards to overflow and get body-clipped.  */
+    .proj-grid { grid-template-columns: minmax(0, 1fr); }
   }
 
   @media (max-width: 768px) {
@@ -599,6 +603,12 @@ const projects: Project[] = [
 
     .proj-heading { grid-column: 1 / -1; font-size: 40px; }
     .proj-lede    { grid-column: 1 / -1; justify-self: start; }
+
+    /* Contain any horizontal overflow from card children (e.g. tags)     */
+    /* that might paint outside a narrow grid track. clip keeps it visual- */
+    /* only (no scroll container created), so the height animation on     */
+    /* .proj-panel-mobile slots is unaffected.                            */
+    .proj-grid { overflow: clip; }
 
     /* Swap drawer for inline-after-card panels */
     #proj-panel        { display: none; }
