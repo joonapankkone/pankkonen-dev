@@ -45,6 +45,19 @@
   /* Layout */
   --max-width: 1280px;
   --gutter:    24px;
+
+  /* Clearance the rail needs from the viewport's right edge:
+     right(28) + footprint(~70) + breathing room. On wide viewports
+     the free margin already covers this so padding stays symmetric;
+     on narrower desktops the padding grows just enough to protect
+     the rail. Zeroed below 901px where the rail is hidden. */
+  --rail-clearance: 100px;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --rail-clearance: 0px;
+  }
 }
 
 /* ─── Base reset & defaults ────────────────────────────────── */
@@ -91,11 +104,22 @@ code, pre, .mono {
 }
 
 /* ─── Grid container ───────────────────────────────────────── */
+/* padding-right grows only as much as needed to keep content
+   clear of the fixed ChapterMarker rail. On wide viewports the
+   natural centering margin already covers the rail clearance,
+   so padding stays symmetric and the container stays centered.
+   On narrower desktops (901px–1280px+) padding increases just
+   enough to prevent the rail from overlapping body copy.
+   Below 901px the rail is hidden so --rail-clearance → 0. */
 .container {
   width: 100%;
   max-width: var(--max-width);
   margin-inline: auto;
   padding-inline: var(--gutter);
+  padding-right: max(
+    var(--gutter),
+    calc(var(--rail-clearance) - max(0px, (100vw - var(--max-width)) / 2))
+  );
 }
 
 /* ─── Hairline dividers ────────────────────────────────────── */
