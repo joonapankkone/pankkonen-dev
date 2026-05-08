@@ -47,7 +47,7 @@ const projects: Project[] = [
     title: 'Future Factory — Team Fearless',
     teaser:
       'JAMK Future Factory (10 ECTS): led a 6-person cross-functional team delivering a PrestaShop e-commerce platform across six Agile sprints and four Gate reviews.',
-    tags: ['PrestaShop', 'Docker', 'GitLab CI/CD', 'CSC Allas', 'Scrum', 'ChatGPT'],
+    tags: ['Scrum', 'Agile', 'Sprint Planning', 'PrestaShop', 'Docker', 'GitLab CI/CD', 'CSC Allas', 'ChatGPT'],
     stats: [
       { value: '6', label: 'team members' },
       { value: '6', label: 'Agile sprints' },
@@ -55,7 +55,7 @@ const projects: Project[] = [
     ],
     paragraphs: [
       "Run as JAMK's Future Factory course (10 ECTS) — a project-based capstone where student teams act as a real software vendor for an external client. Led a six-person cross-functional team building and deploying a PrestaShop e-commerce platform as a managed service: Docker containerisation, automated DB backup to CSC Allas, CI/CD on GitLab, payment integrations, and security hardening. Delivered across six Scrum sprints and four Gate reviews under the Essence Alpha framework.",
-      'The dual Team Leader and Developer role meant sprint planning, task allocation, and Product Owner collaboration. The team covered the full scope: OPS, security, testing, two more developers. Documentation is public.',
+      'The dual Team Leader and Developer role meant sprint planning, task allocation, and Product Owner collaboration. The team covered the full scope: OPS, security, testing, two more developers. Documentation is public. We prioritized sprint stability and review milestones over feature volume to align with the course\'s focus on operational fidelity and teamwork.',
     ],
     links: [
       { href: 'https://core-c0ad9d.pages.labranet.jamk.fi/', label: 'Docs', style: 'primary', disabled: false },
@@ -76,7 +76,7 @@ const projects: Project[] = [
     ],
     paragraphs: [
       'Built with a clear division of labour: I architected and directed, Claude typed. The whole project ran across three Claude interfaces — Cowork, Code, and Design — while I handled architecture and direction throughout.',
-      'Built from scratch with Astro and scoped CSS components for specificity control. Hero entrance runs on CSS-only keyframes (no animation library at runtime); scroll reveals use IntersectionObserver with a double-rAF trick to prevent skipped transitions. Spring easing (cubic-bezier 0.16, 1, 0.3, 1) drives the reveals and panel expansion. The design system — tokens, typography scale, spacing — lives in global.css.',
+      'Built from scratch with Astro and scoped CSS components for specificity control. Hero entrance runs on CSS-only keyframes (no animation library at runtime); scroll reveals use IntersectionObserver with a double-rAF trick to prevent skipped transitions. Spring easing (cubic-bezier 0.16, 1, 0.3, 1) drives the reveals and panel expansion. The design system — tokens, typography scale, spacing — lives in global.css. Mobile optimization and UI refinements are ongoing. This site is a living project, launching early and iterating continuously to reflect my latest career milestones.',
     ],
     links: [
       { href: 'https://github.com/joonapankkone/pankkonen-dev', label: 'GitHub', style: 'primary', disabled: false },
@@ -96,9 +96,7 @@ const projects: Project[] = [
         <span class="proj-accent">Real data, agile teams, hard tradeoffs.</span>
       </h2>
       <p class="proj-lede" data-reveal data-reveal-delay="2">
-        From 2.6M-row ML pipelines to a 6-person Agile team — each project here
-        has a working artifact, a story, and something honest to say about what
-        didn't go perfectly.
+        Working artifacts. Real stories. Honest about what was traded off.
       </p>
     </header>
 
