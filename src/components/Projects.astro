@@ -34,7 +34,7 @@ const projects: Project[] = [
     ],
     paragraphs: [
       'We built a full ML pipeline for used car price prediction: 2.6M rows processed with Polars, careful feature engineering to avoid target leakage, and a three-model comparison between XGBoost, CatBoost (ordered boosting), and LightGBM. Tuning ran through Optuna\'s Bayesian search with K-fold cross-validation.',
-      'Evaluation broke results down by price band and car type rather than stopping at headline numbers — MAE, RMSE, and R² by segment, because that\'s where model failure actually shows up. The dataset has a structural survivorship bias: only sold cars appear, which ruled out sale time as a target. A JAMK coursework project, delivered as a team — with Claude and ChatGPT sparring across feature engineering, code review, and the writeup.',
+      'Evaluation went beyond global R²; we broke down MAE and RMSE by segment to identify where models struggled. A critical finding was the survivorship bias in the data (sold cars only), leading us to pivot away from time-based targets. Delivered as a team-led project using an AI-augmented workflow; we leveraged Claude and ChatGPT for rapid feature prototyping and as a secondary layer for code review and documentation.',
     ],
     links: [
       { href: 'https://aida-project.onrender.com/', label: 'Live Demo', style: 'primary', disabled: false },
@@ -54,8 +54,8 @@ const projects: Project[] = [
       { value: '4', label: 'Gate reviews' },
     ],
     paragraphs: [
-      "Run as JAMK's Future Factory course (10 ECTS) — a project-based capstone where student teams act as a real software vendor for an external client. Led a six-person cross-functional team building and deploying a PrestaShop e-commerce platform as a managed service: Docker containerisation, automated DB backup to CSC Allas, CI/CD on GitLab, payment integrations, and security hardening. Delivered across six Scrum sprints and four Gate reviews under the Essence Alpha framework.",
-      'The dual Team Leader and Developer role meant sprint planning, task allocation, and Product Owner collaboration. The team covered the full scope: OPS, security, testing, two more developers. Documentation is public. We prioritized sprint stability and review milestones over feature volume to align with the course\'s focus on operational fidelity and teamwork.',
+      "Part of JAMK's Future Factory (10 ECTS), acting as a software vendor for an external client. I led a six-person cross-functional team to deploy a managed PrestaShop platform featuring Docker containerization, automated CSC Allas backups, and GitLab CI/CD. The project was delivered across six Scrum sprints and four Gate reviews.",
+      'Balancing the dual role of Team Leader and Developer, I managed sprint planning and stakeholder collaboration. We deliberately prioritized sprint stability and Gate reviews over feature depth—aligning with the course\'s focus on operational fidelity and sustainable teamwork.',
     ],
     links: [
       { href: 'https://core-c0ad9d.pages.labranet.jamk.fi/', label: 'Docs', style: 'primary', disabled: false },
@@ -75,8 +75,8 @@ const projects: Project[] = [
       { value: '100',              label: 'Lighthouse · desktop perf score' },
     ],
     paragraphs: [
-      'Built with a clear division of labour: I architected and directed, Claude typed. The whole project ran across three Claude interfaces — Cowork, Code, and Design — while I handled architecture and direction throughout.',
-      'Built from scratch with Astro and scoped CSS components for specificity control. Hero entrance runs on CSS-only keyframes (no animation library at runtime); scroll reveals use IntersectionObserver with a double-rAF trick to prevent skipped transitions. Spring easing (cubic-bezier 0.16, 1, 0.3, 1) drives the reveals and panel expansion. The design system — tokens, typography scale, spacing — lives in global.css. Mobile optimization and UI refinements are ongoing. This site is a living project, launching early and iterating continuously to reflect my latest career milestones.',
+      'Built with a clear division of labor: I architected and directed while Claude executed. The project spanned three Claude interfaces—Cowork, Code, and Design—maintaining high-level architectural control throughout.',
+      'Built from scratch with Astro and scoped CSS. The hero entrance uses CSS-only keyframes, while scroll reveals utilize IntersectionObserver with a double-rAF trick for smoothness. Spring easing (cubic-bezier 0.16, 1, 0.3, 1) drives the reveals and panel expansion. Mobile optimization remains an active work-in-progress; the site iterates continuously to reflect my latest career milestones.',
     ],
     links: [
       { href: 'https://github.com/joonapankkone/pankkonen-dev', label: 'GitHub', style: 'primary', disabled: false },
