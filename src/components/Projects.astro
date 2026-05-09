@@ -72,7 +72,7 @@ const projects: Project[] = [
     stats: [
       { value: 'Cloudflare Pages', label: 'CDN-deployed' },
       { value: 'Claude Cowork',    label: 'agent pair-build · I directed' },
-      { value: '100 / 98',         label: 'Lighthouse · desktop / mobile' },
+      { value: '100 / 98', label: 'Lighthouse · desktop / mobile' },
     ],
     paragraphs: [
       'Built with a clear division of labor: I architected and directed while Claude executed. The project spanned three Claude interfaces—Cowork, Code, and Design—maintaining high-level architectural control throughout.',
@@ -702,7 +702,20 @@ const projects: Project[] = [
       // Strip thousand-separator commas (e.g. "2,600,000") before the
       // numeric check; re-applied per frame inside animateCountUp.
       const stripped = final.replace(/,/g, '');
-      // Skip non-numeric stat values (e.g. "K-fold + Optuna", "Spring").
+
+      // Handle "N / N" pair format (e.g. "100 / 98") — animate both
+      // numbers simultaneously, keeping the " / " separator intact.
+      const pairMatch = final.match(/^(\d+)\s*\/\s*(\d+)$/);
+      if (pairMatch) {
+        el.textContent = '0 / 0';
+        setTimeout(
+          () => animateCountUpPair(el, parseInt(pairMatch[1]), parseInt(pairMatch[2]), final),
+          baseDelay + i * 100
+        );
+        return;
+      }
+
+      // Skip non-numeric stat values (e.g. "Cloudflare Pages", "Claude Cowork").
       const match = stripped.match(/^(\d+(?:\.\d+)?)([KMB]?)$/);
       if (!match) return;
       // Hold at zero until the count-up actually starts so the user
@@ -748,6 +761,25 @@ const projects: Project[] = [
       el.textContent = fmt(target * eased);
       if (t < 1) requestAnimationFrame(step);
       else el.textContent = finalText; // pin to original string for fidelity
+    };
+    requestAnimationFrame(step);
+  }
+
+  /**
+   * Animate a "N / N" pair from "0 / 0" to its target, keeping the
+   * " / " separator in place throughout. Both numbers count up in sync.
+   */
+  function animateCountUpPair(el: HTMLElement, target1: number, target2: number, finalText: string, duration = 800) {
+    const start   = performance.now();
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+    const step = (now: number) => {
+      const t      = Math.min((now - start) / duration, 1);
+      const eased  = easeOut(t);
+      const n1     = Math.round(target1 * eased);
+      const n2     = Math.round(target2 * eased);
+      el.textContent = `${n1} / ${n2}`;
+      if (t < 1) requestAnimationFrame(step);
+      else el.textContent = finalText; // pin to exact original string
     };
     requestAnimationFrame(step);
   }
