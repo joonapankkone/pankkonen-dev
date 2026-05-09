@@ -2,7 +2,7 @@
 
 Personal CV and portfolio site for Joona Pankkonen — IT Engineering student focused on data analytics and AI, based in Jyväskylä, Finland.
 
-The reference aesthetic is a blend of modern fintech and editorial sites: deep navy, editorial serif headings, spring-easing scroll reveals, one amber accent used sparingly. Full design contract lives in `../DESIGN_SPEC.md`.
+The reference aesthetic is a blend of modern fintech and editorial sites: deep navy, editorial serif headings, spring-easing scroll reveals, one amber accent used sparingly.
 
 ## Stack
 
@@ -26,7 +26,7 @@ The reference aesthetic is a blend of modern fintech and editorial sites: deep n
 | 6b | Beyond redesign — full-bleed 16:9 video stage, copy refresh, EAWrc clip swap | Complete (2026-05-01) |
 | 6c | Polish — chapter rail, divider v3 (StackDivider + ProjectsDivider), Projects card count-up, About-konsolidointi | Complete (2026-05-02) |
 | 7 | Contact | Complete |
-| 8 | Polish & accessibility (Lighthouse 100/99) | Complete (2026-05-05) |
+| 8 | Polish & accessibility (Lighthouse 100/98) | Complete (2026-05-05) |
 | 9 | Cloudflare Workers Assets deploy (wrangler.toml, auto-deploy on push) | Complete (2026-05-06) |
 | 10 | Domain switch — `pankkonen.dev` live, v1.0 published | Complete (2026-05-06) |
 
@@ -54,7 +54,7 @@ src/
 │   ├── Contact.astro           # email, GitHub, LinkedIn
 │   └── *Divider.astro          # 5 section transitions (sweep + editorial)
 └── styles/global.css           # design tokens, motion, section divider
-public/                         # joona.{avif,webp,jpeg}, btc-sim.mp4 + poster
+public/                         # joona.{avif,webp,jpeg}, btc-sim.mp4, btc-sim-mobile.mp4, btc-sim-poster.jpg, og-image.jpg
 docs/superpowers/               # locked specs and execution plans
 wrangler.toml                   # Cloudflare Workers Assets config (assets.directory = dist)
 .node-version                   # pins Node 22 for CF build environment
@@ -64,7 +64,7 @@ wrangler.toml                   # Cloudflare Workers Assets config (assets.direc
 
 - Dark only; no light-mode toggle in v1
 - Scroll-reveal motion uses spring easing `cubic-bezier(0.16, 1, 0.3, 1)` with 28px lift at 750ms; hover and panel transitions use the same curve
-- Hero entrance animations are CSS-only (`@keyframes heroStaggerReveal` + `heroImageReveal`); no animation library at runtime. Hero uses `cubic-bezier(0.215, 0.61, 0.355, 1)` (power2.out) at 600–700ms — intentionally snappier than the scroll-reveal spring
+- Hero entrance animations are CSS-only (`@keyframes heroStaggerReveal` + `heroImageReveal`); no animation library at runtime. Hero uses `cubic-bezier(0.215, 0.61, 0.355, 1)` (power2.out) at 500–700ms — intentionally snappier than the scroll-reveal spring
 - Section dividers replay on every scroll pass (both directions)
 - Reduced-motion users get revealed content with no transitions; ambient background videos pause and show their poster frame
 - Beyond the Code video plays only while the section is in the viewport (IO-gated); muted, looped, no controls — pure ambient element
@@ -72,17 +72,14 @@ wrangler.toml                   # Cloudflare Workers Assets config (assets.direc
 
 ## Performance
 
-Lighthouse scores from `npm run preview` build (Chrome DevTools, 2026-05-05):
+Lighthouse scores from the live production site (pankkonen.dev):
 
 | Category | Desktop | Mobile |
 |----------|---------|--------|
-| Performance | **100** | **99** |
+| Performance | **100** | **98** |
 | Accessibility | 100 | 100 |
 | Best Practices | 100 | 100 |
 | SEO | 100 | 100 |
-
-Desktop core web vitals: FCP 0.2s · LCP 0.5s · TBT 0ms · CLS 0.
-Mobile core web vitals: FCP 0.8s · LCP 2.1s · TBT 0ms · CLS 0.
 
 Notable optimisations:
 - Hero photo served as AVIF (29 KB) with WebP and JPEG fallbacks via `<picture>`
