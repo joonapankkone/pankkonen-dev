@@ -348,12 +348,15 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
       gap: 63px;
     }
 
-    /* Mobile heading: align with Projects/Stack mobile (40px) and stay
-       at-or-above the design-system clamp floor (36px). Previous 32px
-       sat below the system, looking out-of-rhythm next to Projects 40. */
+    /* Mobile heading: tuned to fit "A competitive mindset," on a single
+       line at iPhone 14 Pro width (393 → ~29.5px). Previous 35px wrapped
+       mid-phrase. Floor 28px keeps it readable on iPhone SE; cap 36px
+       keeps it from re-introducing wrap on tablets. -0.025em letter-
+       spacing buys a few extra pixels of horizontal room.               */
     .beyond-heading {
-      font-size: clamp(34px, 9vw, 40px);
-      line-height: 1.05;
+      font-size: clamp(28px, 7.5vw, 36px);
+      line-height: 1.1;
+      letter-spacing: -0.025em;
       margin: 0;
     }
 
