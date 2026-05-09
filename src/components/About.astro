@@ -331,11 +331,12 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
     }
 
     /* Heading overlay — visible on mobile, anchored to video bottom.
-       padding-block-end raised from 28 → 45 to lift the paragraph
-       ~17px off the bottom edge.                                       */
+       padding-block-end controls how far the whole text block sits
+       above the video bottom edge. 30px = both heading + paragraph
+       drop ~15px lower than the previous 45 setting.                   */
     .beyond-inner {
       display: flex;
-      padding-block-end: 45px;
+      padding-block-end: 30px;
     }
 
     /* Gap controls heading↔paragraph separation on mobile. Paragraph
