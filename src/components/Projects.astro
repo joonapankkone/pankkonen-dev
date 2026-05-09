@@ -92,8 +92,12 @@ const projects: Project[] = [
     <header class="proj-header">
       <p class="section-index mono" data-reveal>03 · Projects</p>
       <h2 class="proj-heading" id="proj-heading" data-reveal data-reveal-delay="1">
-        Work that ships.<br />
-        <span class="proj-accent">Real data, agile teams, hard tradeoffs.</span>
+        <span class="proj-phrase">Work that ships.</span><br />
+        <span class="proj-accent">
+          <span class="proj-phrase">Real data,</span>
+          <span class="proj-phrase">agile teams,</span>
+          <span class="proj-phrase">hard tradeoffs.</span>
+        </span>
       </h2>
       <p class="proj-lede" data-reveal data-reveal-delay="2">
         Working artifacts. Real stories. Honest about what was traded off.
@@ -240,6 +244,16 @@ const projects: Project[] = [
     color: var(--primary-soft);
     font-style: italic;
     font-weight: 300;
+  }
+
+  /* Phrase spans keep "Real data," / "agile teams," / "hard tradeoffs."
+     atomic. Browser may break BETWEEN phrases at the spaces, never
+     inside one. Result: 1 line wide → 2 lines mid → 3 lines narrow,
+     always at a comma boundary, never mid-phrase. inline-block makes
+     each phrase a single break-resistant box.                          */
+  .proj-phrase {
+    display: inline-block;
+    white-space: nowrap;
   }
 
   .proj-lede {

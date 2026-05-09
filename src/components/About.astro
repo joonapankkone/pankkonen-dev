@@ -166,7 +166,10 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
     font-size: var(--text-display-l);
     color: var(--text);
     line-height: 1.02;
-    margin: var(--space-2) 0 var(--space-5);
+    /* Bottom-only: nothing above (chapter mark is absolutely positioned).
+       Matches Projects/Experience/Stack/Contact heading rhythm — flush
+       top, gap-controlled bottom.                                       */
+    margin: 0 0 var(--space-5);
   }
 
   .beyond-accent {
@@ -276,59 +279,17 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
       background: var(--bg);
     }
 
-    /* ── 1. Chapter mark + headline ────────────────────────── */
-    .beyond__copy-top {
-      display: block;
-      padding: 32px 20px 24px;
-    }
-
-    .beyond__chapter {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin: 0 0 20px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .beyond__chapter::before {
-      content: "";
-      display: inline-block;
-      width: 24px;
-      height: 1px;
-      background: var(--rule);
-      flex-shrink: 0;
-    }
-
-    .beyond__heading {
-      font-family: var(--font-display);
-      font-size: 36px;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      margin: 0;
-    }
-
-    .beyond__heading em {
-      color: var(--primary-soft);
-      font-style: italic;
-      font-weight: 300;
-    }
-
-    /* ── 2. Animated sweep divider (same as desktop) ────────── */
-    /* Desktop section-separator hidden; in-section instance shown */
+    /* Desktop section-separator hidden on mobile */
     .btd-desktop-wrap {
       display: none;
     }
 
+    /* Mobile-only: animated sweep divider right above the video */
     .beyond__divider-wrap {
       display: block;
     }
 
-    /* ── 3. Video block — portrait 4/5, full-bleed ─────────── */
+    /* ── Video block — portrait 4/5, full-bleed ─────────── */
     .beyond-stage {
       position: relative;
       width: 100%;
@@ -337,9 +298,9 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
       isolation: isolate;
     }
 
-    /* Desktop scrim hidden — mobile uses beyond__media-fade instead */
+    /* Scrim — kept on mobile so heading text is readable */
     .beyond-scrim {
-      display: none;
+      display: block;
     }
 
     /* Slight grade to compensate for removed scrim */
@@ -363,11 +324,45 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
       );
     }
 
-    /* Desktop-only stage elements: hidden on mobile */
+    /* Desktop-only stage decorations: hidden on mobile */
     .beyond-chapter,
-    .beyond-banner,
-    .beyond-inner {
+    .beyond-banner {
       display: none;
+    }
+
+    /* Heading overlay — visible on mobile, anchored to video bottom.
+       padding-block-end raised from 28 → 45 to lift the paragraph
+       ~17px off the bottom edge.                                       */
+    .beyond-inner {
+      display: flex;
+      padding-block-end: 45px;
+    }
+
+    /* Gap controls heading↔paragraph separation on mobile. Paragraph
+       is anchored to video bottom (flex-end + padding-block-end), so
+       gap = how far ABOVE the paragraph the heading sits. Reduced
+       80 → 63 to compensate for the +17 padding bump above, keeping
+       the heading at the same vertical position while the paragraph
+       moves up 17px.                                                   */
+    .beyond-inner > .container {
+      gap: 63px;
+    }
+
+    /* Mobile heading: align with Projects/Stack mobile (40px) and stay
+       at-or-above the design-system clamp floor (36px). Previous 32px
+       sat below the system, looking out-of-rhythm next to Projects 40. */
+    .beyond-heading {
+      font-size: clamp(34px, 9vw, 40px);
+      line-height: 1.05;
+      margin: 0;
+    }
+
+    /* Show paragraph in the fade zone at the video bottom */
+    .beyond-para {
+      display: block;
+      font-size: 15px;
+      line-height: 1.55;
+      max-width: 100%;
     }
 
     /* Mobile race tag — top-LEFT, inside dark gradient veil */
@@ -407,13 +402,9 @@ import BeyondTopDivider from './BeyondTopDivider.astro';
       flex-shrink: 0;
     }
 
-    /* ── 4. Paragraph — pulled up into the bottom-fade tail ─── */
+    /* Paragraph now lives inside the video overlay — hide duplicate */
     .beyond__copy-bottom {
-      display: block;
-      position: relative;
-      z-index: 4;
-      margin-top: -24px;
-      padding: 0 20px 32px;
+      display: none;
     }
 
     .beyond__lede {
