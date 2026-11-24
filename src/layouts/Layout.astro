@@ -12,7 +12,8 @@ const {
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const ogImageUrl = new URL('/og-image.jpg', Astro.site);
+// Bump ?v= whenever og-image.jpg changes: LinkedIn & co. cache by URL.
+const ogImageUrl = new URL('/og-image.jpg?v=2', Astro.site);
 ---
 
 <!doctype html>
