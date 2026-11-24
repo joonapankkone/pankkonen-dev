@@ -343,5 +343,5 @@ Ship sequentially as three commits:
 - Used Car ML team-effort framing rule: memory file `project_used_car_ml.md`
 - Future Factory project context: memory file `project_future_factory_team_fearless.md`
 - Animation philosophy (spring easing, IO double-rAF): memory file `feedback_animation_design.md`
-- Phase 5 Projects original spec: `docs/superpowers/specs/2026-04-24-phase5-projects-design.md`
-- Section divider redesign: `docs/superpowers/specs/2026-04-24-divider-redesign.md`
+- Phase 5 Projects original spec: `docs/design/specs/2026-04-24-phase5-projects-design.md`
+- Section divider redesign: `docs/design/specs/2026-04-24-divider-redesign.md`

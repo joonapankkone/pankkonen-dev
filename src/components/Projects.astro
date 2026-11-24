@@ -1,7 +1,7 @@
 ---
 // Projects — Section 03
 // Apple product-grid pattern: cards stay visible, full-width panel opens below.
-// Ref: docs/superpowers/specs/2026-04-24-phase5-projects-design.md
+// Ref: docs/design/specs/2026-04-24-phase5-projects-design.md
 
 type Stat = { value: string; label: string };
 type Link = { href: string; label: string; style: 'primary' | 'ghost'; disabled?: boolean };
@@ -68,15 +68,15 @@ const projects: Project[] = [
     title: 'pankkonen.dev',
     teaser:
       'A portfolio built from scratch — Astro, scroll-triggered reveals, and a design system inspired by modern sites.',
-    tags: ['Astro', 'Claude', 'Tailwind CSS', 'TypeScript', 'Cloudflare Pages'],
+    tags: ['Astro', 'Claude', 'Tailwind CSS', 'TypeScript', 'Cloudflare Workers'],
     stats: [
-      { value: 'Cloudflare Pages', label: 'CDN-deployed' },
+      { value: 'Cloudflare', label: 'Workers · edge-deployed' },
       { value: 'Claude Cowork',    label: 'agent pair-build · I directed' },
       { value: '100 / 98', label: 'Lighthouse · desktop / mobile' },
     ],
     paragraphs: [
       'Built with a clear division of labor: I architected and directed while Claude executed. The project spanned three Claude interfaces — Cowork, Code, and Design — maintaining high-level architectural control throughout. The process still required extensive hands-on iteration — animation debugging, micro-corrections, responsive behavior, and UI polish. Some elements were intentionally shipped as "good enough"; for example, chapter marker progress transitions between sections remain slightly imperfect because further refinement wasn\'t worth the additional complexity.',
-      'Custom personal CV site built from scratch with Astro, scoped CSS, and TypeScript — optimized for both desktop and mobile. The site emphasizes accessibility, responsive behavior, and performance, with semantic HTML, keyboard navigation, reduced-motion handling, and a lightweight Cloudflare Pages deployment.',
+      'Custom personal CV site built from scratch with Astro, scoped CSS, and TypeScript — optimized for both desktop and mobile. The site emphasizes accessibility, responsive behavior, and performance, with semantic HTML, keyboard navigation, reduced-motion handling, and a lightweight Cloudflare Workers deployment.',
     ],
     links: [
       { href: 'https://github.com/joonapankkone/pankkonen-dev', label: 'GitHub', style: 'primary', disabled: false },
@@ -729,7 +729,7 @@ const projects: Project[] = [
         return;
       }
 
-      // Skip non-numeric stat values (e.g. "Cloudflare Pages", "Claude Cowork").
+      // Skip non-numeric stat values (e.g. "Cloudflare", "Claude Cowork").
       const match = stripped.match(/^(\d+(?:\.\d+)?)([KMB]?)$/);
       if (!match) return;
       // Hold at zero until the count-up actually starts so the user

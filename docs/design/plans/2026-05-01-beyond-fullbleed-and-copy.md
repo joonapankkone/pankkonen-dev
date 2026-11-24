@@ -8,7 +8,7 @@
 
 **Tech Stack:** Astro 6, scoped Astro `<style>` and `<script>`, IntersectionObserver, ffmpeg (VP9/H.264 encoding).
 
-**Spec:** `docs/superpowers/specs/2026-05-01-beyond-fullbleed-and-copy-design.md`
+**Spec:** `docs/design/specs/2026-05-01-beyond-fullbleed-and-copy-design.md`
 
 **Source clip:** `EAWrc_knockoutv2.mov` — 1920×1080, 60 fps, ~16 s, ~19 Mbps (verified via `ffprobe`). Currently in the session's `uploads/` folder; the user will copy it to a working location at the start of Task 1.
 

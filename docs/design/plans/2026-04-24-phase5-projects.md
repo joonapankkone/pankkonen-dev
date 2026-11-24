@@ -30,7 +30,7 @@
 ---
 // Projects — Section 03
 // Apple product-grid pattern: cards stay visible, full-width panel opens below.
-// Ref: docs/superpowers/specs/2026-04-24-phase5-projects-design.md
+// Ref: docs/design/specs/2026-04-24-phase5-projects-design.md
 
 type Stat = { value: string; label: string };
 type Link = { href: string; label: string; style: 'primary' | 'ghost'; disabled?: boolean };
